@@ -1,0 +1,30 @@
+---
+interface Props {
+    /** inline：桌面端头部居中；bar：移动端头部下方、与页面内容同层级 */
+    variant?: 'inline' | 'bar';
+}
+
+const { variant = 'inline' } = Astro.props;
+---
+
+<div
+    class:list={[
+        'search-box',
+        variant === 'inline'
+            ? 'search-box-inline absolute left-1/2 -translate-x-1/2 hidden md:block'
+            : 'search-box-bar md:hidden',
+    ]}
+>
+    <div class="search-field">
+        <input class="search-input" type="search" placeholder="搜索文章标题或内容…" autocomplete="off" aria-label="搜索文章" />
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.5"></circle>
+            <path d="M16.5 16.5 L21 21" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+        </svg>
+    </div>
+    <div class="search-results" data-search-results></div>
+</div>
+
+<script>
+    import '../scripts/search';
+</script>

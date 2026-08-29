@@ -25,3 +25,8 @@ logs
 
 # Certification
 ssl/
+
+# Tool generated
+.astro/
+.zcode/
+.mimosa/

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutBook from '../components/AboutBook.astro';
+import { siteConfig } from '../config/site';
+---
+
+<BaseLayout title={`关于 - ${siteConfig.blogName}`} description={siteConfig.description}>
+    <div class="mx-auto w-full max-w-[80rem]">
+        <AboutBook />
+    </div>
+</BaseLayout>
+
+<script>
+    import '../scripts/about-book';
+</script>
