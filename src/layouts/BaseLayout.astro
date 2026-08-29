@@ -1,0 +1,112 @@
+---
+import '../styles/main.less';
+import '../styles/markdown.less';
+import '../styles/components.less';
+import AppBackground from '../components/AppBackground.astro';
+import AppHeader from '../components/AppHeader.astro';
+import AppFooter from '../components/AppFooter.astro';
+import SearchBox from '../components/SearchBox.astro';
+import { siteConfig, authorInfo } from '../config/site';
+
+interface Props {
+    title?: string;
+    description?: string;
+    /** 桌面端让内容区恰好占满视口（配合文章页双独立滚动面板，杜绝页面级滚动余量） */
+    fitViewport?: boolean;
+    /** 不渲染站点顶部导航（个人主页等自带顶栏的页面使用） */
+    hideHeader?: boolean;
+    /** 移动端隐藏头部下方的搜索栏（文章阅读页等沉浸式页面使用） */
+    hideMobileSearch?: boolean;
+    /** 文章页：开启 article 类 OG/JSON-LD，并注入封面与时间信息 */
+    isArticle?: boolean;
+    ogImage?: string;
+    publishedTime?: string;
+    updatedTime?: string;
+}
+
+const {
+    title = siteConfig.blogName,
+    description = siteConfig.description,
+    fitViewport = false,
+    hideHeader = false,
+    hideMobileSearch = false,
+    isArticle = false,
+    ogImage,
+    publishedTime,
+    updatedTime,
+} = Astro.props;
+
+// 移动端搜索栏仅在文章相关页面（/article/ 列表与详情）显示
+const isArticlePage = Astro.url.pathname.startsWith('/article');
+
+// canonical / og:url：真实域名 + 当前路径（trailingSlash: always 已带尾斜杠）
+const canonical = `${siteConfig.site}${Astro.url.pathname}`;
+
+// JSON-LD：站点信息全站注入，文章页追加 Article 结构
+const ldJson = isArticle
+    ? {
+          '@context': 'https://schema.org',
+          '@graph': [
+              {
+                  '@type': 'Article',
+                  headline: title,
+                  description,
+                  image: ogImage ? `${siteConfig.site}${ogImage}` : undefined,
+                  datePublished: publishedTime,
+                  dateModified: updatedTime,
+                  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+                  author: { '@type': 'Person', name: authorInfo.name, url: `${siteConfig.site}/profile/` },
+              },
+              { '@type': 'WebSite', name: siteConfig.blogName, url: siteConfig.site },
+          ],
+      }
+    : {
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: siteConfig.blogName,
+          url: siteConfig.site,
+          description,
+      };
+const ldJsonHtml = JSON.stringify(ldJson).replace(/</g, '\\u003c');
+---
+
+<!doctype html>
+<html lang={siteConfig.lang}>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="keyword" content={siteConfig.blogName} />
+        <link rel="canonical" href={canonical} />
+        <meta property="og:site_name" content={siteConfig.blogName} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:type" content={isArticle ? 'article' : 'website'} />
+        {ogImage && <meta property="og:image" content={`${siteConfig.site}${ogImage}`} />}
+        {isArticle && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+        {isArticle && updatedTime && <meta property="article:modified_time" content={updatedTime} />}
+        <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="alternate" type="application/rss+xml" title={title} href="/rss.xml" />
+        <link rel="preconnect" href="https://q.qlogo.cn" crossorigin />
+        <script is:inline type="application/ld+json" set:html={ldJsonHtml}></script>
+    </head>
+    <body>
+        <AppBackground />
+        {!hideHeader && <AppHeader />}
+        <div
+            class:list={[
+                'relative w-full min-h-[100vh] overflow-hidden',
+                { 'mt-[var(--height-header)]': !hideHeader },
+                { 'md:h-[calc(100dvh-var(--height-header)-var(--height-footer))] md:min-h-[0]': fitViewport },
+            ]}
+        >
+        {isArticlePage && !hideMobileSearch && <SearchBox variant="bar" />}
+        <slot />
+    </div>
+        <AppFooter />
+    </body>
+</html>

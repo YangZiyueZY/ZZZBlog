@@ -1,0 +1,95 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config/site';
+import 'katex/dist/katex.min.css';
+
+export async function getStaticPaths() {
+    const articles = await getCollection('articles');
+    return articles.map((entry) => ({
+        params: { id: String(entry.data.id) },
+        props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const { title, description, createTime, modifiedTime } = entry.data;
+
+// 目录只展示 H2/H3，链接指向 Astro 自动生成的标题锚点
+const toc = (headings ?? [])
+    .filter((h) => h.depth >= 2 && h.depth <= 3)
+    .map((h) => ({ depth: h.depth, slug: h.slug, text: h.text }));
+---
+
+<BaseLayout
+    fitViewport
+    hideMobileSearch
+    isArticle
+    title={`${title} - ${siteConfig.blogName}`}
+    description={description || siteConfig.description}
+    ogImage={entry.data.cover[0]}
+    publishedTime={createTime}
+    updatedTime={modifiedTime}
+>
+    <div class="relative min-h-[100vh] md:min-h-[0] pt-[var(--height-header)]">
+        <button class="back-button" type="button" aria-label="返回上一页"></button>
+        <div class="back-button_pressed"></div>
+
+        <!-- 桌面端：左文右目录双独立滚动面板（页面本身不滚动）；移动端保持原单栏 -->
+        <div class="article-layout md:mx-auto md:flex md:max-w-[76rem] md:items-start md:gap-x-6 md:px-8">
+            <article
+                data-role="article-scroll"
+                class="md:flex-1 md:min-w-0 md:self-stretch md:overflow-y-auto md:p-5 sm:m-0 sm:p-2 text-xl text-white bg-[#1e1e1e] md:rounded-2xl sm:rounded-none border-4 border-black"
+            >
+                <div class="markdown-body">
+                    <Content />
+                </div>
+            </article>
+
+            {
+                toc.length > 0 && (
+                    <aside class="article-toc hidden md:block shrink-0" data-role="article-toc" aria-label="文章目录">
+                        <span class="article-toc__label">目录</span>
+                        <nav>
+                            {toc.map((item) => (
+                                <a
+                                    class:list={[
+                                        'article-toc__link',
+                                        { 'article-toc__link--sub': item.depth === 3 },
+                                    ]}
+                                    href={`#${item.slug}`}
+                                >
+                                    {item.text}
+                                </a>
+                            ))}
+                        </nav>
+                    </aside>
+                )
+            }
+        </div>
+
+        <div class="image-modal" id="image-modal" aria-hidden="true" role="dialog" aria-label="图片预览">
+            <button class="close-button" type="button" aria-label="关闭图片预览"></button>
+            <div class="close-button_pressed"></div>
+            <img id="modal-image" class="modal-img mx-auto mt-[var(--height-header)] mb-[var(--height-footer)] w-[80%] bg-contain border-8 border-black rounded-[0_var(--border-image-modal)_0_var(--border-image-modal)] z-[53]" src="" alt="" />
+        </div>
+    </div>
+</BaseLayout>
+
+<script>
+    import '../../scripts/article-detail';
+    import '../../scripts/article-toc';
+</script>
+
+<style is:global>
+    /* 桌面端双独立滚动面板：页面本身不可滚动（否则页脚余量会把整个面板行顶偏）。
+       clip（而非 hidden）会让浏览器在设备切换后直接丢弃残留滚动偏移，避免整页错位。 */
+    @media (min-width: 768px) {
+        html,
+        body {
+            overflow: hidden !important;
+            overflow: clip !important;
+        }
+    }
+</style>

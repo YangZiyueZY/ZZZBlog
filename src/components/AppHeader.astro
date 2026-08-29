@@ -1,0 +1,79 @@
+---
+import AppAuthor from './AppAuthor.astro';
+import SearchBox from './SearchBox.astro';
+import { getCollection } from 'astro:content';
+import { navList } from '../constants/nav';
+
+// 当前路径用于导航激活态（trailingSlash: always，如 /article/、/about/）
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) => currentPath.startsWith(href);
+// 搜索框仅在文章相关页面（/article/ 列表与详情）显示
+const isArticlePage = currentPath.startsWith('/article');
+
+// 站内搜索索引：构建期把标题+正文转成纯文本，供前端即时过滤（含内容搜索）
+const searchIndex = (await getCollection('articles'))
+    .map((entry) => ({
+        id: entry.data.id,
+        title: entry.data.title,
+        url: `/article/${entry.data.id}/`,
+        desc: entry.data.description,
+        text: (entry.body ?? '')
+            .replace(/```[\s\S]*?```/g, ' ')
+            .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+            .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+            .replace(/[#>*`|~\-_]|^\s*[-+]\s+/gm, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, 1500),
+    }))
+    .sort((a, b) => a.id - b.id);
+const searchIndexJson = JSON.stringify(searchIndex).replace(/</g, '\\u003c');
+---
+
+<header class="flex fixed items-center justify-between top-0 w-full h-[var(--height-header)] bg-black z-50">
+    {isArticlePage && <script is:inline type="application/json" id="search-index" set:html={searchIndexJson}></script>}
+    <AppAuthor />
+    {isArticlePage && <SearchBox variant="inline" />}
+    <ul class="nav-pc relative flex shrink-0 justify-around items-center p-0 mr-4 h-[2.2rem] bg-[#050505] rounded-[2rem] border-[3px] border-[#383838] shadow-[0_0_0_1px_rgba(255,255,255,.1),inset_0_0_4px_rgba(0,0,0,1)]">
+        {
+            navList.map((nav) => (
+                <li class="w-[9rem] text-white text-center font-bold italic cursor-pointer align-middle">
+                    <a href={nav.href} class:list={[{ active: isActive(nav.href) }, 'relative z-0 hover:text-[#808080]']}>
+                        {nav.title}
+                        <div class="bg absolute top-1/2 left-1/2 w-[9.5rem] h-[2.5rem] rounded-[.5rem_1rem] -translate-x-1/2 -translate-y-1/2 skew-x-[var(--inclination-degree)] z-[-1]" />
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+    <div class="mobile-menu-wrapper relative h-full aspect-square">
+        <button class="mobile-menu" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-mobile">
+            <span class="absolute block top-1/2 left-0 bg-[#232323] w-[70%] h-[6px] rounded-full"></span>
+            <span class="absolute block top-1/2 left-0 bg-[#232323] w-[70%] h-[6px] rounded-full"></span>
+            <span class="absolute block top-1/2 left-0 bg-[#232323] w-[70%] h-[6px] rounded-full"></span>
+        </button>
+    </div>
+    <ul id="nav-mobile" class="nav-mobile absolute top-[var(--height-header)] right-0 p-2 bg-[#050505] rounded-[1rem] border-[3px] border-[#383838]">
+        {
+            navList.map((nav) => (
+                <li class="relative flex justify-center items-center p-0 w-36 h-10 text-white text-center font-bold italic bg-[#050505] rounded-[2rem] border-[3px] border-[#383838] shadow-[0_0_0_1px_rgba(255,255,255,.1),inset_0_0_4px_rgba(0,0,0,1)] align-middle">
+                    <a href={nav.href} class:list={[{ active: isActive(nav.href) }, 'relative z-0 hover:text-[#808080]']}>
+                        {nav.title}
+                        <div class="bg absolute top-1/2 left-1/2 w-[9.5rem] h-[2.5rem] rounded-[2rem] -translate-x-1/2 -translate-y-1/2 z-[-1]" />
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</header>
+
+<script>
+    const menuButton = document.querySelector<HTMLButtonElement>('.mobile-menu');
+    const mobileMenu = document.querySelector<HTMLElement>('.nav-mobile');
+
+    menuButton?.addEventListener('click', () => {
+        const open = mobileMenu?.classList.toggle('open') ?? false;
+        menuButton.setAttribute('aria-expanded', String(open));
+        menuButton.setAttribute('aria-label', open ? '关闭导航菜单' : '打开导航菜单');
+    });
+</script>

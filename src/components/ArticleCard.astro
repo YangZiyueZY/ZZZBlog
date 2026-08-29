@@ -1,0 +1,39 @@
+---
+import type { ArticleMeta } from '../types/article';
+
+interface Props {
+    article: ArticleMeta;
+    index: number;
+}
+
+const { article, index } = Astro.props;
+// 原版入场动画错峰：每张卡片延迟 0.02s * idx
+const animationDelay = `${0.02 * index}s, 0s`;
+---
+
+<a
+    href={`/article/${article.id}/`}
+    class="article-card relative flex-col border-4 border-black rounded-[1.5rem_1.5rem_0_1.5rem] overflow-hidden cursor-pointer transition-all duration-200 opacity-0 animate-[fade-in_0.1s_ease-in-out_forwards] hover:animate-[fade-in_0.1s_ease-in-out_forwards,gradient-border_2s_linear_infinite]"
+    data-masonry-item
+    style={`animation-delay: ${animationDelay}`}
+>
+    <div class="flex absolute items-center top-2 left-2 text-white z-[2] gap-2 font-[.9rem]">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+        </svg>
+        <span>{article.views}</span>
+    </div>
+    <div
+        class="card-cover relative w-full after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-[url('data:image/svg+xml,%3Csvg%20viewBox%3D%270%200%20200%20200%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cfilter%20id%3D%27noiseFilter%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.8%27%20numOctaves%3D%273%27%20stitchTiles%3D%27stitch%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23noiseFilter%29%27%2F%3E%3C%2Fsvg%3E')] after:mix-blend-overlay after:opacity-50 after:pointer-events-none"
+    >
+        <div class="cover-loading" aria-hidden="true">
+            <div class="cover-loading-anim"></div>
+        </div>
+        <img class="w-full object-cover align-middle" src={article.cover[0]} alt={article.title} loading="lazy" decoding="async" />
+    </div>
+    <div class="py-2 px-4 bg-[#222222]">
+        <h2 class="m-0 text-[#929292] font-bold line-clamp-2 overflow-hidden text-ellipsis">{article.title}</h2>
+        <p class="m-0 text-[#AAAAAA] text-[.8rem] font-bold">{article.description}</p>
+    </div>
+</a>

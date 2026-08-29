@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { siteConfig } from '../../config/site';
+import type { ArticleMeta } from '../../types/article';
+import { articleStats } from '../../lib/articles';
+
+const entries = await getCollection('articles');
+// 与原版一致：按 id 升序展示；阅读时长/字数在构建期算好注入数据层
+const articles: ArticleMeta[] = entries
+    .map((entry) => ({ ...entry.data, ...articleStats(entry.body ?? '') }))
+    .sort((a, b) => a.id - b.id);
+---
+
+<BaseLayout title={`文章 - ${siteConfig.blogName}`} description={siteConfig.description}>
+    <div class="relative my-8 mx-auto max-w-[90%] min-h-[100vh]">
+        <div
+            class="article-grid grid items-start gap-5 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
+            data-masonry
+        >
+            {articles.map((article, idx) => <ArticleCard article={article} index={idx} />)}
+        </div>
+    </div>
+</BaseLayout>
+
+<script>
+    import '../../scripts/masonry';
+</script>

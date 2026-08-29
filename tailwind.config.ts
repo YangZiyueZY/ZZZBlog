@@ -1,10 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        "./components/**/*.vue",
-        "./layouts/**/*.vue",
-        "./pages/**/*.vue",
-        "./app.vue"
+        "./src/**/*.{astro,html,js,jsx,ts,tsx,vue,md}"
     ],
     theme: {
         extend: {
@@ -20,13 +17,13 @@ module.exports = {
                 },
                 "gradient-border": {
                     '0%': {
-                        border: '4px solid var(--color-flicker-from)'  
+                        border: '4px solid var(--color-flicker-from)'
                     },
                     '50%': {
-                        border: '4px solid var(--color-flicker-to)'  
+                        border: '4px solid var(--color-flicker-to)'
                     },
                     '100%': {
-                        border: '4px solid var(--color-flicker-from)'  
+                        border: '4px solid var(--color-flicker-from)'
                     },
                 },
                 "slide": {
@@ -44,9 +41,9 @@ module.exports = {
         function ({
                 addUtilities,
                 theme
-            }: { 
-                addUtilities: (utilities: Record<string, Record<string, string>>) => void, 
-                theme: (path: string) => Record<string, string> 
+            }: {
+                addUtilities: (utilities: Record<string, Record<string, string>>) => void,
+                theme: (path: string) => Record<string, string>
             }) {
             const textShadows = theme('textShadow')
             const utilities: Record<string, { 'text-shadow': string }> = Object.entries(textShadows).reduce((acc: Record<string, { 'text-shadow': string }>, [key, value]) => {

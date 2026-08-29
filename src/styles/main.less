@@ -1,0 +1,84 @@
+// out: false
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  // Outline
+  --text-shadow-grey: -1.3px -1.3px 0 #414141, -1.3px 1.3px 0 #414141, 1.3px 1.3px 0 #414141;
+  --text-shadow-black: -1.3px -1.3px #000, -1.3px 1.3px #000, 1.3px 1.3px #000;
+  --text-shadow-none: none;
+
+  // Height
+  --height-header: 4rem;
+  --height-footer: 5rem;
+
+  // Color
+  --color-flicker-from: #F1D801;
+  --color-flicker-to: #6bbd00;
+
+  // Border
+  --border-card-about: 1.5rem;
+  --border-image-markdown: 3rem;
+  --border-image-modal: 5rem;
+
+  // Miscellaneous
+  --inclination-degree: -28deg;
+  --clip-size: 5rem;
+}
+
+/* ===== 全局基础样式（原 app.vue） ===== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+/* 设置滚动条宽度，箭头会自动消除 */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 0;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: #2a2a2a;
+  border-radius: 5px;
+  width: 5px;
+}
+
+/* 使页面不被挤压（仅 Chrome 生效） */
+html {
+  overflow-y: overlay;
+}
+
+/* ===== 无障碍：系统开启“减弱动态效果”时停用装饰动画 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
