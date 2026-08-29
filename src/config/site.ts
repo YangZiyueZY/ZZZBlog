@@ -17,7 +17,7 @@ export const siteConfig = {
     blogName: `${authorInfo.name}的个人博客`,
     description: `欢迎来到${authorInfo.name}的个人博客`,
     /** 建站年份 */
-    foundedYear: 2024,
+    foundedYear: 2026,
     /** 页脚版权年份 */
     copyrightYear: 2026,
     author: authorInfo,

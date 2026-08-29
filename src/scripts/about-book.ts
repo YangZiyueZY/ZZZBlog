@@ -1,9 +1,9 @@
 /**
  * 关于页「快速手册」交互（原 Vue 组件状态 → 原生 TS）：
- * - 顶部页签切换分组（关于我 / Github）
+ * - 顶部页签切换分组（关于我 / 友链）
  * - 左栏切换栏目
  * - 卡片点选 + 桌面端键盘左右切换
- * - Github 列表「前往」按钮新开仓库页
+ * - 友链详情「前往」按钮新开站点
  * 所有面板均在构建期渲染为静态 HTML，这里只做显隐切换。
  */
 
@@ -88,11 +88,11 @@ if (root) {
         }
     });
 
-    // 桌面端键盘左右切换（仅「关于我」卡片视图；只拦截方向键，不再全局 preventDefault）
+    // 桌面端键盘左右切换（所有卡片视图；只拦截方向键，不再全局 preventDefault）
     document.addEventListener('keydown', (event) => {
         if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
         const panel = getActivePanel();
-        if (!panel || panel.dataset.groupTitle !== '关于我') return;
+        if (!panel) return;
 
         const length = panel.querySelectorAll('[data-role="card"]').length;
         if (!length) return;

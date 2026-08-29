@@ -56,81 +56,70 @@ import { aboutInfo } from '../data/about';
                                     data-role="column-panel"
                                     data-group={gi}
                                     data-column={ci}
-                                    data-group-title={group.title}
                                     class:list={[{ hidden: !(gi === 0 && ci === 0) }]}
                                 >
-                                    {group.title === '关于我' ? (
-                                        <div class="list-container_net-style">
-                                            <ul class="card-grid flex flex-wrap content-start m-4 gap-[2.5%] w-full h-full">
-                                                {column.item.map((item, ii) => (
-                                                    <li data-role="card" class:list={['w-[5rem]', { active: ii === 0 }]}>
-                                                        <div class="card-thumb mb-1">
+                                    <div class="list-container_net-style">
+                                        <ul class="card-grid flex flex-wrap content-start m-4 gap-[2.5%] w-full h-full">
+                                            {column.item.map((item, ii) => (
+                                                <li data-role="card" class:list={['w-[5rem]', { active: ii === 0 }]}>
+                                                    <div class="card-thumb mb-1">
+                                                        <img
+                                                            src={item.icon ?? item.url}
+                                                            alt={item.title}
+                                                            class="relative block m-0 w-full border-[3px] border-solid border-[#3F3F3F] rounded-[var(--border-card-about)] cursor-pointer z-[1]"
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                        />
+                                                    </div>
+                                                    <span class="block w-full py-1.5 px-0 text-center text-xs font-bold leading-3 text-white bg-black rounded-full cursor-pointer">
+                                                        {item.title}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <div class="card-detail">
+                                            {column.item.map((item, ii) => (
+                                                <div
+                                                    data-role="card-detail"
+                                                    class:list={[{ hidden: ii !== 0 }]}
+                                                    style="z-index: 2; padding: 1rem; width: 100%;"
+                                                >
+                                                    <div class="flex flex-row justify-between">
+                                                        <h1 class="font-bold text-3xl text-shadow-black">{item.title}</h1>
+                                                        <div>
                                                             <img
-                                                                src={item.url}
+                                                                src={item.icon ?? item.url}
                                                                 alt={item.title}
-                                                                class="relative block m-0 w-full border-[3px] border-solid border-[#3F3F3F] rounded-[var(--border-card-about)] cursor-pointer z-[1]"
+                                                                class="w-[5rem] border-[var(--border-card-about)]"
+                                                                loading="lazy"
+                                                                decoding="async"
+                                                            />
+                                                            <img
+                                                                src={item.icon ?? item.url}
+                                                                alt=""
+                                                                aria-hidden="true"
+                                                                class="absolute top-[2.5rem] right-[3rem] w-2/5 aspect-square z-[-1] grayscale-[1] opacity-[.3]"
                                                                 loading="lazy"
                                                                 decoding="async"
                                                             />
                                                         </div>
-                                                        <span class="block w-full py-1.5 px-0 text-center text-xs font-bold leading-3 text-white bg-black rounded-full cursor-pointer">
-                                                            {item.title}
-                                                        </span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                            <div class="card-detail">
-                                                {column.item.map((item, ii) => (
-                                                    <div
-                                                        data-role="card-detail"
-                                                        class:list={[{ hidden: ii !== 0 }]}
-                                                        style="z-index: 2; padding: 1rem; width: 100%;"
-                                                    >
-                                                        <div class="flex flex-row justify-between">
-                                                            <h1 class="font-bold text-3xl text-shadow-black">{item.title}</h1>
-                                                            <div>
-                                                                <img
-                                                                    src={item.url}
-                                                                    alt={item.title}
-                                                                    class="w-[5rem] border-[var(--border-card-about)]"
-                                                                    loading="lazy"
-                                                                    decoding="async"
-                                                                />
-                                                                <img
-                                                                    src={item.url}
-                                                                    alt=""
-                                                                    aria-hidden="true"
-                                                                    class="absolute top-[2.5rem] right-[3rem] w-2/5 aspect-square z-[-1] grayscale-[1] opacity-[.3]"
-                                                                    loading="lazy"
-                                                                    decoding="async"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div class="mt-8 whitespace-pre-line indent-[2em]">
-                                                            {item.description?.split('\n').map((paragraph) => <p>{paragraph}</p>)}
-                                                        </div>
                                                     </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <ul class="list-container_linear-style">
-                                            {column.item.map((item) => (
-                                                <li class="relative flex justify-between pl-4 w-full h-10 text-white bg-[linear-gradient(to_bottom,#404040,#303030)] rounded-[3rem] leading-10">
-                                                    <span title={item.title} class="w-[80%] overflow-hidden text-ellipsis whitespace-nowrap">
-                                                        {item.title}
-                                                    </span>
-                                                    <button
-                                                        type="button"
-                                                        data-url={item.url}
-                                                        class="absolute right-0 top-0 m-[.1rem] p-[2px] w-[8rem] h-[calc(100%-.2rem)] text-white bg-[linear-gradient(#080808,#080808),linear-gradient(#343434,#343434)] bg-clip-content border-2 border-[#080808] rounded-[2rem] leading-4 font-bold italic cursor-pointer hover:bg-[linear-gradient(#151515,#151515),linear-gradient(#343434,#343434)]"
-                                                    >
-                                                        前往
-                                                    </button>
-                                                </li>
+                                                    <div class="mt-8 whitespace-pre-line indent-[2em]">
+                                                        {item.description?.split('\n').map((paragraph) => <p>{paragraph}</p>)}
+                                                    </div>
+                                                    {group.title === '友链' && (
+                                                        <button
+                                                            type="button"
+                                                            data-url={item.url}
+                                                            class="mt-6 inline-block px-8 py-[.3rem] text-white bg-[linear-gradient(#080808,#080808),linear-gradient(#343434,#343434)] bg-clip-content border-2 border-[#080808] rounded-[2rem] font-bold italic cursor-pointer hover:bg-[linear-gradient(#151515,#151515),linear-gradient(#343434,#343434)]"
+                                                        >
+                                                            前往
+                                                        </button>
+                                                    )}
+                                                </div>
                                             ))}
-                                        </ul>
-                                    )}
+                                        </div>
+                                    </div>
                                 </div>
                             ))
                         )

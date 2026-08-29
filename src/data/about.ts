@@ -8,77 +8,76 @@ export const aboutInfo: AboutGroup[] = [
                 title: '技术栈',
                 item: [
                     {
-                        title: 'Git',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Git.svg',
-                        description: 'Git，代码版本管理工具，支持分支管理、代码合并和远程协作。'
-                    },
-                    {
-                        title: 'Vue',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/VueJS-Dark.svg',
-                        description: '一个 JavaScript 框架，采用组件化开发方式，具有双向数据绑定、虚拟 DOM 等特性。\nVue 的单文件组件（SFC）特性使得 HTML、CSS、JS 均能在一个文件中编写。'
+                        title: 'Astro',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Astro.svg',
+                        description: '本博客的核心框架，负责静态站点生成与路由。文章由内容集合（Content Collections）管理，搜索索引、RSS 订阅与站点地图均在构建期生成。'
                     },
                     {
                         title: 'TypeScript',
                         url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/TypeScript.svg',
-                        description: 'TypeScript 是 JavaScript 的超集，添加了静态类型系统。它提供了严格的类型检查，以便于在编程过程中发现问题。'
+                        description: '全站组件、脚本与配置均使用 TypeScript 编写，配合 astro check 在开发期完成静态类型检查，减少运行时错误。'
                     },
                     {
-                        title: 'Docker',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Docker.svg',
-                        description: 'Docker 是一个容器化平台，用于构建、部署和运行应用程序。它通过容器技术实现环境隔离和快速部署。'
+                        title: 'Tailwind CSS',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/TailwindCSS-Dark.svg',
+                        description: '原子化 CSS 框架，通过工具类完成布局、间距与响应式适配，与 Less 共同负责全站样式。'
                     },
                     {
-                        title: 'FastAPI',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/FastAPI.svg',
-                        description: '一个 Python 框架，一般用于构建 Web 应用的后端。相比于 Flask 提供了更高的性能、易用的 API。'
+                        title: 'Less',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Less-Dark.svg',
+                        description: 'CSS 预处理器，用于编写组件级样式、选择器层级与主题变量，配合 Tailwind 处理更复杂的样式逻辑。'
                     },
                     {
-                        title: 'PostgreSQL',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/PostgreSQL-Dark.svg',
-                        description: 'PostgreSQL 是一个功能强大的开源关系型数据库，社区庞大。'
+                        title: 'Markdown',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Markdown-Dark.svg',
+                        description: '文章内容全部以 Markdown 编写，经 Content Collections 在构建期解析校验，并通过 remark-math 与 KaTeX 渲染数学公式。'
                     },
                 ]
             },
             {
-                title: "栏目2",
+                title: '构建与部署',
                 item: [
                     {
-                        title: 'Rust',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Rust.svg',
-                        description: 'Rust，一种编程语言。'
+                        title: 'Git',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Git.svg',
+                        description: '代码版本管理工具，支持分支管理、代码合并与远程协作。'
                     },
                     {
-                        title: 'MySQL',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/MySQL-Dark.svg',
-                        description: 'MySQL 是一种数据库服务。'
+                        title: 'Vite',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Vite-Dark.svg',
+                        description: 'Astro 底层的构建工具，开发期提供 HMR 热更新与依赖预构建，并通过 vite-plugin-pwa 为站点提供离线缓存。'
                     },
                     {
-                        title: 'React',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/React-Dark.svg',
-                        description: 'React 是目前主流的前端框架之一。'
+                        title: 'pnpm',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Pnpm-Dark.svg',
+                        description: '本项目的包管理器，负责依赖安装与脚本管理（dev / build / preview 等）。'
+                    },
+                    {
+                        title: 'GitHub Actions',
+                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/GithubActions-Dark.svg',
+                        description: 'CI/CD 自动化部署：push 到主分支后自动执行构建，并将产物发布到 GitHub Pages。'
                     },
                 ]
             }
         ],
     },
     {
-        title: 'Github',
+        title: '友链',
         item: [
             {
-                title: '开源项目',
+                title: '朋友们',
                 item: [
                     {
-                        title: 'xiaozhi-webui: 一个基于 Vue3 实现的 Web 版小智 AI，已完成文字聊天、语音聊天，欢迎 PR',
-                        url: 'https://github.com/yang-zhihang/xiaozhi-webui'
+                        title: 'Paper2Galgame',
+                        url: 'https://paper2gal.com',
+                        icon: 'https://paper2gal.com/apple-touch-icon.png',
+                        description: 'AI 驱动的论文学习工具：把学术论文转化为互动视觉小说，上传 PDF 即可与动漫搭档对话，让研读文献更有代入感。'
                     },
-                ]
-            },
-            {
-                title: "栏目2",
-                item: [
                     {
-                        title: 'nfc-stc-pn532: 基于 STC89C52 和 PN532 集成 NFC 模块的宿舍智能门禁系统',
-                        url: 'https://github.com/yang-zhihang/nfc-stc-pn532'
+                        title: '绳网',
+                        url: 'https://interk.net',
+                        icon: 'https://interk.net/icon/globe-512x512.png',
+                        description: '新艾利都最大的匿名委托中枢，一个以《绝区零》为主题的虚拟网络社区。'
                     },
                 ]
             }
