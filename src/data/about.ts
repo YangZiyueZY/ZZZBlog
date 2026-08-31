@@ -76,7 +76,7 @@ export const aboutInfo: AboutGroup[] = [
                     {
                         title: '绳网',
                         url: 'https://interk.net',
-                        icon: 'https://interk.net/icon/globe-512x512.png',
+                        icon: '/img/globe-white.png',
                         description: '新艾利都最大的匿名委托中枢，一个以《绝区零》为主题的虚拟网络社区。'
                     },
                 ]
