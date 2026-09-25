@@ -1,5 +1,5 @@
 ---
-import { authorInfo } from '../config/site';
+import { authorInfo, withBase } from '../config/site';
 
 // 等级/经验在构建期算好，不随客户端下发任何计算逻辑
 const birthday = new Date(authorInfo.birth);
@@ -15,7 +15,7 @@ const expPercentage = (currentExp / totalExp) * 100;
 ---
 
 <div class="author">
-    <a href="/profile/" class="h-full aspect-square border-[3px] border-black rounded-full overflow-hidden shrink-0" title="个人主页">
+    <a href={withBase('/profile/')} class="h-full aspect-square border-[3px] border-black rounded-full overflow-hidden shrink-0" title="个人主页">
         <img class="w-full h-full object-cover" src={authorInfo.avatar} alt="User Avatar" loading="eager" decoding="async" />
     </a>
     <div class="flex max-[312px]:hidden grow flex-col justify-center gap-[.2rem]">

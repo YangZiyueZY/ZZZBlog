@@ -3,19 +3,21 @@ import AppAuthor from './AppAuthor.astro';
 import SearchBox from './SearchBox.astro';
 import { getCollection } from 'astro:content';
 import { navList } from '../constants/nav';
+import { stripBase, withBase } from '../config/site';
 
-// 当前路径用于导航激活态（trailingSlash: always，如 /article/、/about/）
+// 当前路径用于导航激活态（trailingSlash: always，如 /article/、/about/）；
+// 部署在子路径时 Astro.url.pathname 含 base，故与导航同口径比较时需先剥掉
 const currentPath = Astro.url.pathname;
 const isActive = (href: string) => currentPath.startsWith(href);
 // 搜索框仅在文章相关页面（/article/ 列表与详情）显示
-const isArticlePage = currentPath.startsWith('/article');
+const isArticlePage = stripBase(currentPath).startsWith('/article');
 
 // 站内搜索索引：构建期把标题+正文转成纯文本，供前端即时过滤（含内容搜索）
 const searchIndex = (await getCollection('articles'))
     .map((entry) => ({
         id: entry.data.id,
         title: entry.data.title,
-        url: `/article/${entry.data.id}/`,
+        url: withBase(`/article/${entry.data.id}/`),
         desc: entry.data.description,
         text: (entry.body ?? '')
             .replace(/```[\s\S]*?```/g, ' ')

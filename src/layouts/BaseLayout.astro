@@ -6,7 +6,7 @@ import AppBackground from '../components/AppBackground.astro';
 import AppHeader from '../components/AppHeader.astro';
 import AppFooter from '../components/AppFooter.astro';
 import SearchBox from '../components/SearchBox.astro';
-import { siteConfig, authorInfo } from '../config/site';
+import { siteConfig, authorInfo, stripBase, withBase } from '../config/site';
 
 interface Props {
     title?: string;
@@ -37,9 +37,9 @@ const {
 } = Astro.props;
 
 // 移动端搜索栏仅在文章相关页面（/article/ 列表与详情）显示
-const isArticlePage = Astro.url.pathname.startsWith('/article');
+const isArticlePage = stripBase(Astro.url.pathname).startsWith('/article');
 
-// canonical / og:url：真实域名 + 当前路径（trailingSlash: always 已带尾斜杠）
+// canonical / og:url：真实域名 + 当前路径（pathname 已含部署子路径，trailingSlash: always 已带尾斜杠）
 const canonical = `${siteConfig.site}${Astro.url.pathname}`;
 
 // JSON-LD：站点信息全站注入，文章页追加 Article 结构
@@ -51,11 +51,11 @@ const ldJson = isArticle
                   '@type': 'Article',
                   headline: title,
                   description,
-                  image: ogImage ? `${siteConfig.site}${ogImage}` : undefined,
+                  image: ogImage ? `${siteConfig.site}${withBase(ogImage)}` : undefined,
                   datePublished: publishedTime,
                   dateModified: updatedTime,
                   mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-                  author: { '@type': 'Person', name: authorInfo.name, url: `${siteConfig.site}/profile/` },
+                  author: { '@type': 'Person', name: authorInfo.name, url: `${siteConfig.site}${withBase('/profile/')}` },
               },
               { '@type': 'WebSite', name: siteConfig.blogName, url: siteConfig.site },
           ],
@@ -84,13 +84,13 @@ const ldJsonHtml = JSON.stringify(ldJson).replace(/</g, '\\u003c');
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonical} />
         <meta property="og:type" content={isArticle ? 'article' : 'website'} />
-        {ogImage && <meta property="og:image" content={`${siteConfig.site}${ogImage}`} />}
+        {ogImage && <meta property="og:image" content={`${siteConfig.site}${withBase(ogImage)}`} />}
         {isArticle && publishedTime && <meta property="article:published_time" content={publishedTime} />}
         {isArticle && updatedTime && <meta property="article:modified_time" content={updatedTime} />}
         <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="alternate" type="application/rss+xml" title={title} href="/rss.xml" />
+        <link rel="icon" type="image/x-icon" href={withBase('/favicon.ico')} />
+        <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+        <link rel="alternate" type="application/rss+xml" title={title} href={withBase('/rss.xml')} />
         <link rel="preconnect" href="https://q.qlogo.cn" crossorigin />
         <script is:inline type="application/ld+json" set:html={ldJsonHtml}></script>
     </head>

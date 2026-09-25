@@ -1,5 +1,6 @@
 ---
 import { aboutInfo } from '../data/about';
+import { withBase } from '../config/site';
 ---
 
 <div class="book" id="about-book">
@@ -64,7 +65,7 @@ import { aboutInfo } from '../data/about';
                                                 <li data-role="card" class:list={['w-[5rem]', { active: ii === 0 }]}>
                                                     <div class="card-thumb mb-1">
                                                         <img
-                                                            src={item.icon ?? item.url}
+                                                            src={withBase(item.icon ?? item.url)}
                                                             alt={item.title}
                                                             class="relative block m-0 w-full border-[3px] border-solid border-[#3F3F3F] rounded-[var(--border-card-about)] cursor-pointer z-[1]"
                                                             loading="lazy"
@@ -88,14 +89,14 @@ import { aboutInfo } from '../data/about';
                                                         <h1 class="font-bold text-3xl text-shadow-black">{item.title}</h1>
                                                         <div>
                                                             <img
-                                                                src={item.icon ?? item.url}
+                                                                src={withBase(item.icon ?? item.url)}
                                                                 alt={item.title}
                                                                 class="w-[5rem] border-[var(--border-card-about)]"
                                                                 loading="lazy"
                                                                 decoding="async"
                                                             />
                                                             <img
-                                                                src={item.icon ?? item.url}
+                                                                src={withBase(item.icon ?? item.url)}
                                                                 alt=""
                                                                 aria-hidden="true"
                                                                 class="absolute top-[2.5rem] right-[3rem] w-2/5 aspect-square z-[-1] grayscale-[1] opacity-[.3]"

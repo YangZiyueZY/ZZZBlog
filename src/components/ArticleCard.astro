@@ -1,5 +1,6 @@
 ---
 import type { ArticleMeta } from '../types/article';
+import { withBase } from '../config/site';
 
 interface Props {
     article: ArticleMeta;
@@ -12,7 +13,7 @@ const animationDelay = `${0.02 * index}s, 0s`;
 ---
 
 <a
-    href={`/article/${article.id}/`}
+    href={withBase(`/article/${article.id}/`)}
     class="article-card relative flex-col border-4 border-black rounded-[1.5rem_1.5rem_0_1.5rem] overflow-hidden cursor-pointer transition-all duration-200 opacity-0 animate-[fade-in_0.1s_ease-in-out_forwards] hover:animate-[fade-in_0.1s_ease-in-out_forwards,gradient-border_2s_linear_infinite]"
     data-masonry-item
     style={`animation-delay: ${animationDelay}`}
@@ -30,7 +31,7 @@ const animationDelay = `${0.02 * index}s, 0s`;
         <div class="cover-loading" aria-hidden="true">
             <div class="cover-loading-anim"></div>
         </div>
-        <img class="w-full object-cover align-middle" src={article.cover[0]} alt={article.title} loading="lazy" decoding="async" />
+        <img class="w-full object-cover align-middle" src={withBase(article.cover[0])} alt={article.title} loading="lazy" decoding="async" />
     </div>
     <div class="py-2 px-4 bg-[#222222]">
         <h2 class="m-0 text-[#929292] font-bold line-clamp-2 overflow-hidden text-ellipsis">{article.title}</h2>

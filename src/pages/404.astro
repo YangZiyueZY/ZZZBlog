@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { siteConfig } from '../config/site';
+import { siteConfig, withBase } from '../config/site';
 ---
 
 <BaseLayout title={`404 - ${siteConfig.blogName}`} description="页面不存在">
@@ -10,7 +10,7 @@ import { siteConfig } from '../config/site';
         </div>
         <p class="text-white text-[1.15rem] font-bold">页面不存在或已被移除</p>
         <a
-            href="/article/"
+            href={withBase('/article/')}
             class="inline-flex items-center justify-center h-[2.6rem] px-6 text-white font-bold italic bg-[#050505] border-[3px] border-[#383838] rounded-[2rem] shadow-[0_0_0_1px_rgba(255,255,255,.1),inset_0_0_4px_rgba(0,0,0,1)] hover:text-[#808080] transition-colors"
         >
             ← 返回文章列表

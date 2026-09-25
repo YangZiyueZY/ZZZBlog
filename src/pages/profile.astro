@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { authorInfo, siteConfig } from '../config/site';
+import { authorInfo, siteConfig, withBase } from '../config/site';
 
 const articles = await getCollection('articles');
 const articleCount = articles.length;
@@ -40,8 +40,8 @@ const slots = ['名片位 1', '名片位 2', '名片位 3', '名片位 4', '名�
 
 const actions = [
     { label: '修改头像', href: 'https://q.qlogo.cn', isNew: true },
-    { label: '修改称号', href: '/about/', isNew: false },
-    { label: '修改勋章', href: '/about/', isNew: false },
+    { label: '修改称号', href: withBase('/about/'), isNew: false },
+    { label: '修改勋章', href: withBase('/about/'), isNew: false },
     { label: '修改名片', href: 'https://github.com/yang-zhihang', isNew: true },
 ];
 ---
@@ -170,7 +170,7 @@ const actions = [
                         <div class="profile-levelbar-fill" style={`width: ${expPercentage}%`}></div>
                     </div>
                 </div>
-                <a class="profile-keeper-btn" href="/about/">绳网等级</a>
+                <a class="profile-keeper-btn" href={withBase('/about/')}>绳网等级</a>
             </div>
 
             <!-- 右侧当前权益 -->
