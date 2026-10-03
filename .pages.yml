@@ -1,0 +1,103 @@
+# Pages CMS 配置（https://pagescms.org/docs/configuration/）
+# 在 https://app.pagescms.org 用 GitHub 账号连接本仓库后即可在网页端管理文章。
+# 文章存储：src/content/articles/（schemas 见 src/content.config.ts）
+# 封面图存储：public/img/（写入 frontmatter 时以 /img 前缀引用，与现有 cover 格式一致）
+
+media:
+  input: public/img
+  output: /img
+  # 保留上传时的原始文件名（现有封面多为中文名，不做转写/乱序化）
+  rename: false
+  extensions: [webp, png, jpg, jpeg, svg, gif]
+
+settings:
+  # 保存时不删除 schema 之外的既有 frontmatter 键，避免误清未知字段
+  content:
+    merge: true
+  commit:
+    templates:
+      create: "feat: 新增文章 {path}"
+      update: "docs: 更新文章 {path}"
+      delete: "chore: 删除文章 {path}"
+      rename: "chore: 移动文章 {oldPath} -> {newPath}"
+
+content:
+  - name: articles
+    label: 文章
+    type: collection
+    path: src/content/articles
+    format: yaml-frontmatter
+    # 与仓库内现有命名一致：1.md、2.md……；创建时允许手动改名
+    filename:
+      template: "{fields.id}.md"
+      field: create
+    view:
+      primary: title
+      sort: createTime
+      order: desc
+    actions:
+      # 一键触发仓库已有的部署工作流（.github/workflows/deploy.yml）
+      - name: deploy
+        label: 构建并发布
+        scope: collection
+        workflow: deploy.yml
+    fields:
+      - name: id
+        label: 文章 ID
+        type: number
+        required: true
+        description: 唯一数字，决定网址 /article/{id}/，不可与现有文章重复
+
+      - name: title
+        label: 标题
+        type: string
+        required: true
+
+      - name: description
+        label: 简介
+        type: text
+
+      - name: views
+        label: 浏览量
+        type: number
+        options:
+          min: 0
+
+      - name: createTime
+        label: 发布时间
+        type: date
+        required: true
+        description: 格式 2025-01-01 10:00:00
+        options:
+          time: true
+          format: "yyyy-MM-dd HH:mm:ss"
+
+      - name: modifiedTime
+        label: 修改时间
+        type: date
+        required: true
+        description: 格式 2025-01-01 10:00:00
+        options:
+          time: true
+          format: "yyyy-MM-dd HH:mm:ss"
+
+      - name: cover
+        label: 封面图
+        type: image
+        description: 可粘贴外链，也可从 public/img 图库选择或上传新图
+        options:
+          multiple: true
+
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+
+      - name: body
+        label: 正文
+        type: rich-text
