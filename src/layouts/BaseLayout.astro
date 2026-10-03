@@ -68,6 +68,19 @@ const ldJson = isArticle
           description,
       };
 const ldJsonHtml = JSON.stringify(ldJson).replace(/</g, '\\u003c');
+
+// CSS（less）里引用不到 withBase()，public 图标经此以 CSS 变量下发，
+// 避免样式表写裸根路径在子路径部署（/ZZZBlog）下 404
+const cssIconVars = [
+    ['--icon-back', '/icon/back.webp'],
+    ['--icon-back-pressed', '/icon/back_pressed.webp'],
+    ['--icon-close', '/icon/close.webp'],
+    ['--icon-close-pressed', '/icon/close_pressed.webp'],
+    ['--icon-zzz-loading', '/icon/zzz-loading.webp'],
+    ['--icon-quote', '/icon/quote.webp'],
+]
+    .map(([name, path]) => `${name}: url('${withBase(path)}')`)
+    .join('; ');
 ---
 
 <!doctype html>
@@ -94,7 +107,7 @@ const ldJsonHtml = JSON.stringify(ldJson).replace(/</g, '\\u003c');
         <link rel="preconnect" href="https://q.qlogo.cn" crossorigin />
         <script is:inline type="application/ld+json" set:html={ldJsonHtml}></script>
     </head>
-    <body>
+    <body style={cssIconVars}>
         <AppBackground />
         {!hideHeader && <AppHeader />}
         <div
