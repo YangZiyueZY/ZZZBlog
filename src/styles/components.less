@@ -2703,3 +2703,243 @@
     padding: 0.3rem 0.75rem;
   }
 }
+
+/* ===== 个人主页：项目卡片与分区标题 ===== */
+.profile-section {
+  margin-top: 1.6rem;
+}
+
+.profile-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.profile-section-en {
+  display: block;
+  color: #f1d801;
+  font-size: 0.62rem;
+  font-weight: bold;
+  letter-spacing: 0.32em;
+}
+
+.profile-section-head h2 {
+  margin: 0.15rem 0 0;
+  color: #fff;
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 900;
+  text-shadow: var(--text-shadow-black);
+}
+
+.profile-section-link {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #333;
+  border-radius: 999px;
+  color: #9a9a9a;
+  font-size: 0.78rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.profile-section-link:hover {
+  color: #f1d801;
+  border-color: #f1d801;
+}
+
+.profile-projects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.profile-project {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(0, 0, 0, 0.25));
+  border: 1px solid #333;
+  border-radius: 1rem;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.profile-project:hover {
+  border-color: #f1d801;
+  background: linear-gradient(145deg, rgba(241, 216, 1, 0.07), rgba(0, 0, 0, 0.25));
+  transform: translateY(-2px);
+}
+
+.profile-project-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.profile-project-title {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-project-title svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+  color: #9a9a9a;
+}
+
+.profile-project-title h3 {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 800;
+}
+
+.profile-project-title h3 a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.profile-project-arrow {
+  flex-shrink: 0;
+  color: #6bbd00;
+  font-size: 1.1rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.profile-project:hover .profile-project-arrow {
+  transform: translate(2px, -2px);
+}
+
+.profile-project-desc {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: #9a9a9a;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.profile-project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.profile-project-tags span {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid #333;
+  border-radius: 999px;
+  color: #bdbdbd;
+  font-size: 0.68rem;
+}
+
+.profile-project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  color: #8a8a8a;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.profile-project-owner {
+  color: #6bbd00;
+}
+
+.profile-project-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.profile-project-lang i {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+
+.profile-project-license {
+  margin-left: auto;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid #333;
+  border-radius: 999px;
+  color: #aaa;
+}
+
+.profile-project-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.profile-project-actions a {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #3a3a3a;
+  border-radius: 0.5rem;
+  color: #ddd;
+  font-size: 0.72rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.profile-project-actions a:first-child {
+  background: #f1d801;
+  border-color: #f1d801;
+  color: #000;
+}
+
+.profile-project-actions a:hover {
+  border-color: #f1d801;
+  color: #f1d801;
+}
+
+.profile-project-actions a:first-child:hover {
+  background: #ffe94a;
+  color: #000;
+}
+
+.profile-section-head--gallery {
+  margin-top: 1.6rem;
+}
+
+.profile-section-head--gallery + .profile-slots {
+  margin-top: 0.7rem;
+}
+
+@media (max-width: 767px) {
+  .profile-projects {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-section-head h2 {
+    font-size: 1.3rem;
+  }
+
+  .profile-project-meta {
+    gap: 0.4rem 0.7rem;
+  }
+
+  .profile-project-license {
+    margin-left: 0;
+  }
+}
