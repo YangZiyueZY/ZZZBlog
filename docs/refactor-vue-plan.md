@@ -706,13 +706,13 @@ export function mountReact(name: string, el: HTMLElement, props: object) {
 - 搜索索引生成与消费。
 - 验收：14 篇文章 URL 全部 200；标题锚点与旧版一致；公式/代码/表格/图片正确；列表排序一致；构建失败时错误信息可定位。
 
-### P3 交互（1.5 天）
+### P3 交互（1.5 天）——**已完成**（2026-11-21）
 
 - 瀑布流、搜索、目录滚动高亮/移动浮层、图片预览、代码复制、返回键、页脚滑入。
 - About 三级切换、Profile 双视图/复制/菜单/权益滚动。
 - 验收：交互清单全过；无 hydration 警告；桌面/移动行为一致；**连续切换 `/article/1/ → 2 → 3`** 时目录/复制/预览均更新；移动端滚到底切桌面宽度后滚动复位。
 
-### P4 外围能力（1 天）
+### P4 外围能力（1 天）——**已完成**（2026-11-21）
 
 - RSS、sitemap、robots、PWA、根跳转、404（静态化去脚本）、`.nojekyll`。
 - 更新 GitHub Actions / Netlify / Vercel / `.pages.yml` 注释。
@@ -908,13 +908,48 @@ pnpm check:vue     # vue-tsc
   - 导航 `{{ nav.title }}` 与相邻 `<div>` 之间的换行空格；
   - AboutBook 的页签/卡片标题/“前往”按钮文本节点。
 - **P3 已补**：文章详情/个人主页返回按钮（`useBackButton`，按压闪烁 0.3s 后 `history.back()`）；已用 Playwright 验证「列表 → 文章 → 返回列表」。
-- 剩余 P3：搜索、TOC 滚动高亮、图片放大、代码复制、页脚滑入、Profile/About 交互；P4：RSS/sitemap/robots/PWA/根跳转的 postbuild。
+- **P3 全部完成**：搜索、TOC 滚动高亮/移动浮层、图片放大、代码复制、页脚滑入、Profile/About 交互。
+- **P4 全部完成**：RSS、sitemap、robots、PWA、静态 404、根跳转。
+- 回归结果见附录 B.8。
 - 常用命令新增：`pnpm content`；默认 `pnpm dev` / `pnpm build` 已切换为 Vue（自动先跑内容生成）。
-- **Astro 原版已从本分支删除**：移除 `astro.config.mjs`、`src/pages`、`src/components`、`src/layouts`、`src/scripts`、`src/content.config.ts`、Astro 依赖与脚本；`pnpm check`、`pnpm lint`、`pnpm build` 全部通过。主工作区仍保留 Astro 作为回滚备份，尚未合并。
+- **Astro 原版已删除并已合并到主工作区**：`refactor-vue` 分支提交 `fd9c25c`，主分支 fast-forward 到该提交；主工作区现在是 Vue 版本。原 Astro 工作区改动已 stash 备份（`backup: Astro working tree before Vue merge`）。
+
+### B.8 P3/P4 全量回归（2026-11-21）
+
+**测试方式**：Playwright（Chromium）驱动真实构建产物，覆盖桌面 1440×900 与移动 390×844；同时检查控制台错误、clipboard、PWA 离线与所有静态产物。
+
+| 区域 | 用例 | 结果 |
+| --- | --- | --- |
+| 返回按钮 | 列表 → 文章 → 返回 | 回到列表，卡片 14 张 |
+| 列表 | 第 3 张卡片进入文章 3 | 通过 |
+| Header | 头像 → 个人主页；文章/关于导航；移动端汉堡菜单 | 全部通过 |
+| 搜索 | 桌面/移动搜索栏/移动菜单搜索；标题+正文匹配；方向键+Enter；Esc；无结果 | 全部通过 |
+| 文章 | 目录点击滚动、滚动高亮、移动端目录浮层 | 通过（滚动 190px，active link=1） |
+| 文章 | 图片放大/关闭、代码复制、页脚滑入 | 全部通过 |
+| 关于 | 关于我/友链、栏目切换、卡片点选、键盘左右、友链“前往”弹窗 | 全部通过（弹窗 https://interk.net/） |
+| 个人主页 | 个人主页/绳匠档案、UID 复制、更多菜单、分享复制、权益滚动、绳匠等级入口 | 全部通过 |
+| 404 | 返回文章列表 | 通过 |
+| 根跳转 | `/` → `/article/` | 通过 |
+| 订阅 | `/rss.xml`（14 条）、sitemap-index/0、robots | 200，URL 全部带 base |
+| PWA | SW scope `/ZZZBlog/`、离线刷新文章 | 通过（离线可读） |
+| 剪贴板 | 局域网 http（Clipboard API 不可用）下 UID/分享/代码复制 | 回退 execCommand，按钮显示“已复制” |
+| 控制台 | 全流程 error/warning | 0 |
+
+**回归中发现并修复的真实 bug**：
+
+1. **TOC 滚动高亮完全失效**：`IntersectionObserver` 的 `rootMargin: '-1rem 0px -70% 0px'` 在 Chrome 抛 `SyntaxError`（rootMargin 只接受 px/%）。改为 `-16px 0px -70% 0px`，并在点击目录时立即 `setActive`。
+2. **移动端搜索下拉跑到页面底部**：`.search-box-bar` / `.search-box-menu` 没有定位上下文，`.search-results` 相对 `.page-shell` 定位，结果落到页脚附近并被页脚拦截点击。给两个变体补 `position: relative`。
+3. **返回按钮未绑定**：补 `useBackButton`，详情页与个人主页共用。
+4. **PWA 在 SSG 之后注入 registerSW，导致静态 404 仍带脚本**：postbuild 对 `404.html` 统一剥离所有 `<script>` 与 modulepreload。
+5. **局域网 http 下 Clipboard API 不可用**：新增 `copyText()`，在非安全上下文回退 `execCommand('copy')`。
+
+**当前产物**：19 条 SSG 路由；主包 gzip 47.16KB；KaTeX CSS 已按路由拆分；RSS/sitemap/robots/PWA 全部生成。主工作区已切换到 Vue（提交 `fd9c25c`）。
+
+**仍属 P5**：README 完整重写、最终视觉/性能回归、CI 调整、清理 worktree 与 stash。
 
 ## 附录 C：关键文件索引
 
-- 配置：`astro.config.mjs`、`src/config/site.ts`、`src/content.config.ts`、`tailwind.config.ts`
+- 配置：`vite.config.ts`、`tsconfig.json`、`src/config/site.ts`、`src/content/schema.ts`、`tailwind.config.ts`
 - 页面：`src/pages/article/index.astro`、`src/pages/article/[id].astro`、`src/pages/about.astro`、`src/pages/profile.astro`
 - 组件：`src/components/`
 - 交互：`src/scripts/`

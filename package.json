@@ -7,7 +7,7 @@
     "dev": "tsx scripts/build-content.ts && vite",
     "build": "tsx scripts/build-content.ts && vite-ssg build && tsx scripts/postbuild.ts",
     "preview": "vite preview",
-    "check": "vue-tsc --noEmit -p tsconfig.json",
+    "check": "tsx scripts/build-content.ts && vue-tsc --noEmit -p tsconfig.json",
     "content": "tsx scripts/build-content.ts",
     "postbuild": "tsx scripts/postbuild.ts",
     "lint": "eslint ."
