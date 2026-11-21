@@ -83,8 +83,8 @@ useHead({
   ],
   link: [
     { rel: 'canonical', href: canonical.value },
-    { rel: 'icon', type: 'image/x-icon', href: withBase('/favicon.ico') },
-    { rel: 'apple-touch-icon', href: withBase('/apple-touch-icon.png') },
+    { rel: 'icon', type: 'image/x-icon', href: withBase('/favicon.ico?v=2') },
+    { rel: 'apple-touch-icon', href: withBase('/apple-touch-icon.png?v=2') },
     { rel: 'alternate', type: 'application/rss+xml', title: title.value, href: withBase('/rss.xml') },
   ],
   script: [{ type: 'application/ld+json', innerHTML: JSON.stringify(ldJson.value).replace(/</g, '\\u003c') }],
