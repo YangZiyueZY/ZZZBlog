@@ -2659,3 +2659,47 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== 个人主页横幅：昵称/签名固定在头像右侧，徽章放到其下方 ===== */
+.profile-banner-left {
+  grid-template-columns: 6rem minmax(0, 1fr);
+  grid-template-areas:
+    'avatar info'
+    'avatar medals';
+  align-items: start;
+  gap: 0.65rem 1.6rem;
+}
+
+.profile-avatar {
+  grid-area: avatar;
+}
+
+.profile-banner-info {
+  grid-area: info;
+  min-width: 0;
+}
+
+.profile-medals {
+  grid-area: medals;
+  align-self: start;
+}
+
+@media (max-width: 767px) {
+  .profile-banner-left {
+    grid-template-columns: 4.6rem minmax(0, 1fr);
+    grid-template-areas:
+      'avatar info'
+      'avatar medals';
+    justify-items: start;
+    gap: 0.6rem 1rem;
+  }
+
+  .profile-name {
+    font-size: 1.7rem;
+  }
+
+  .profile-greeting {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.75rem;
+  }
+}
