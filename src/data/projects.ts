@@ -31,16 +31,16 @@ export const projects: ProjectItem[] = [
   },
   {
     name: 'AutoTapper',
-    owner: 'JX-Lab',
-    url: 'https://github.com/JX-Lab/AutoTapper',
+    owner: 'YangZiyueZY',
+    url: 'https://github.com/YangZiyueZY/AutoTapper',
     description:
       '轻量 Android 自动点击器，基于无障碍服务在任意应用中悬浮取点，并按顺序轮流点击多个位置。',
     language: 'Kotlin',
     languageColor: '#A97BFF',
-    stars: 12,
-    forks: 12,
-    updated: '2026-11-20',
-    license: 'MIT',
+    stars: 0,
+    forks: 0,
+    updated: '2026-09-26',
+    license: '未声明',
     tags: ['Android', '无障碍服务', '自动化'],
   },
   {
