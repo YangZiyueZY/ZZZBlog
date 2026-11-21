@@ -6,7 +6,7 @@ export const authorInfo = {
     name: 'KingDove',
     birth: '2005-04-29',
     /** 头像已本地化（public/img/avatar.jpg，源：QQ 头像服务），避免外链加载失败；使用处需经 withBase() */
-    avatar: '/img/avatar.jpg',
+    avatar: '/img/avatar-gugu.webp',
     email: 'YangZiying@111.com',
     uid: '2097853195',
 } as const;
