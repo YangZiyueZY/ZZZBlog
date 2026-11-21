@@ -106,6 +106,21 @@ function searchText(markdown: string) {
     .slice(0, 1500)
 }
 
+const PROFILE_IMAGE_EXT = /\.(png|jpe?g|webp|avif|gif|svg)$/i
+
+function scanProfileImages(subdir: 'badges' | 'cg'): string[] {
+  const dir = resolve(publicDir, 'img/profile', subdir)
+  if (!existsSync(dir)) return []
+  const files = readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && PROFILE_IMAGE_EXT.test(entry.name))
+    .map((entry) => entry.name)
+    .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
+  if (files.length > 6) {
+    console.warn('[content] public/img/profile/' + subdir + ' 有 ' + files.length + ' 张图片，按文件名升序只取前 6 张')
+  }
+  return files.slice(0, 6).map((name) => encodeURI('/img/profile/' + subdir + '/' + name))
+}
+
 async function main() {
   rmSync(outDir, { recursive: true, force: true })
   mkdirSync(resolve(outDir, 'articles'), { recursive: true })
@@ -167,11 +182,15 @@ async function main() {
   writeFileSync(resolve(outDir, 'index.json'), JSON.stringify(index))
   writeFileSync(resolve(outDir, 'search-index.json'), JSON.stringify(searchIndex))
   writeFileSync(resolve(outDir, 'routes.json'), JSON.stringify(routes))
+  writeFileSync(
+    resolve(outDir, 'profile-images.json'),
+    JSON.stringify({ badges: scanProfileImages('badges'), cg: scanProfileImages('cg') }),
+  )
   for (const article of articles) {
     writeFileSync(resolve(outDir, 'articles', `${article.meta.id}.json`), JSON.stringify({ html: article.html }))
   }
 
-  console.log(`[content] ${articles.length} 篇文章 → .content（index / articles / search-index / routes）`)
+  console.log(`[content] ${articles.length} 篇文章 → .content（index / articles / search-index / routes / profile-images）`)
   if (!existsSync(resolve(outDir, 'index.json'))) process.exit(1)
 }
 

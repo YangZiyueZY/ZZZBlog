@@ -3,6 +3,7 @@ import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { ref } from 'vue'
 import { authorInfo, siteConfig, withBase } from '../../src/config/site'
 import { aboutInfo } from '../../src/data/about'
+import profileImages from '../../.content/profile-images.json'
 import { useBackButton } from '../composables/useBackButton'
 import { useProfilePage } from '../composables/useProfilePage'
 
@@ -24,14 +25,9 @@ const { onBack } = useBackButton(backPressed)
 const profileRoot = ref<HTMLElement>()
 useProfilePage(profileRoot)
 
-// 名片墙上的勋章（复用关于页的技术栈徽章；已本地化到 public/img/icons/）
-const medals = [
-  { name: 'Git', url: '/img/icons/git.svg' },
-  { name: 'Vue', url: '/img/icons/vuejs-dark.svg' },
-  { name: 'TypeScript', url: '/img/icons/typescript.svg' },
-]
-
-const slots = ['名片位 1', '名片位 2', '名片位 3', '名片位 4', '名片位 5', '名片位 6']
+// 徽章 / CG 均由 public/img/profile 构建期扫描，最多各 6 张
+const badges = profileImages.badges as string[]
+const cgImages = profileImages.cg as string[]
 
 </script>
 
@@ -91,13 +87,13 @@ const slots = ['名片位 1', '名片位 2', '名片位 3', '名片位 4', '名�
               <h1 class="profile-name">{{ authorInfo.name }}</h1>
               <p class="profile-greeting">欢迎来到，KingDove的主页</p>
             </div>
-            <div class="profile-medals">
+            <div v-if="badges.length" class="profile-medals">
               <img
-                v-for="medal in medals"
-                :key="medal.name"
-                :src="withBase(medal.url)"
-                :alt="`${medal.name} 勋章`"
-                :title="medal.name"
+                v-for="(badge, index) in badges"
+                :key="badge"
+                :src="withBase(badge)"
+                :alt="`徽章 ${index + 1}`"
+                :title="`徽章 ${index + 1}`"
                 loading="lazy"
                 decoding="async"
               />
@@ -117,12 +113,14 @@ const slots = ['名片位 1', '名片位 2', '名片位 3', '名片位 4', '名�
           </span>
         </div>
 
-        <!-- 名片槽位 -->
-        <div class="profile-slots">
-          <div v-for="slot in slots" :key="slot" class="profile-slot" :title="slot">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"></path>
-            </svg>
+        <!-- CG 矩形图（读取 public/img/profile/cg，最多 6 张） -->
+        <div
+          v-if="cgImages.length"
+          class="profile-slots"
+          :class="{ 'profile-slots--one': cgImages.length === 1, 'profile-slots--two': cgImages.length === 2 }"
+        >
+          <div v-for="(image, index) in cgImages" :key="image" class="profile-slot" :title="`CG ${index + 1}`">
+            <img :src="withBase(image)" :alt="`CG ${index + 1}`" loading="lazy" decoding="async" />
           </div>
         </div>
 

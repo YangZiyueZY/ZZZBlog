@@ -2612,3 +2612,50 @@
     display: block;
   }
 }
+
+/* ===== 个人主页：徽章 / CG 图片网格 ===== */
+.profile-medals {
+  flex-wrap: wrap;
+}
+
+.profile-slots {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.profile-slots--one {
+  grid-template-columns: 1fr;
+}
+
+.profile-slots--two {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.profile-slot {
+  overflow: hidden;
+  padding: 0;
+  cursor: default;
+  background: #0d0d0d;
+}
+
+.profile-slot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.profile-slot:hover img {
+  transform: scale(1.035);
+}
+
+@media (max-width: 767px) {
+  .profile-slots {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  .profile-slots--one {
+    grid-template-columns: 1fr;
+  }
+}
