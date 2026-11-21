@@ -83,7 +83,7 @@ const actions = [
           <div class="bg absolute top-1/2 left-1/2 w-[9.5rem] h-[2.5rem] rounded-[.5rem_1rem] -translate-x-1/2 -translate-y-1/2 skew-x-[var(--inclination-degree)] z-[-1]"></div>
         </button>
         <button type="button" data-role="profile-tab" data-view="tools" aria-selected="false">
-          <span>工具</span>
+          <span>关于</span>
           <div class="bg absolute top-1/2 left-1/2 w-[9.5rem] h-[2.5rem] rounded-[.5rem_1rem] -translate-x-1/2 -translate-y-1/2 skew-x-[var(--inclination-degree)] z-[-1]"></div>
         </button>
       </div>
@@ -238,12 +238,12 @@ const actions = [
         </div>
       </section>
 
-      <!-- ===== 视图三：工具（原「关于我」内容） ===== -->
-      <section data-role="profile-view" data-view="tools" class="profile-panel profile-tools hidden" aria-label="工具">
+      <!-- ===== 视图三：关于（原「关于我」内容） ===== -->
+      <section data-role="profile-view" data-view="tools" class="profile-panel profile-tools hidden" aria-label="关于">
         <div class="profile-tools-head">
           <div>
-            <span class="profile-tools-en" aria-hidden="true">TOOLKIT</span>
-            <h2>工具</h2>
+            <span class="profile-tools-en" aria-hidden="true">ABOUT</span>
+            <h2>关于</h2>
           </div>
           <p>建站技术栈与常用工具，按「技术栈 / 构建与部署」分组。</p>
         </div>

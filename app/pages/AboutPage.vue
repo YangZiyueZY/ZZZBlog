@@ -6,6 +6,15 @@ import { authorInfo, siteConfig, withBase } from '../../src/config/site'
 const friendGroup = aboutInfo.find((group) => group.title === '友链')
 const friends = friendGroup?.item.flatMap((column) => column.item) ?? []
 
+const tools = [
+  {
+    title: '搞机工具箱 · WebADB',
+    description: '全安卓通用、免 ROOT 的网页版玩机工具箱，基于 WebADB 在浏览器中连接安卓设备。',
+    href: 'https://czjam.github.io/gjgjxweb/',
+    mono: 'ADB',
+  },
+]
+
 const siteLinks = [
   {
     title: 'RSS 订阅',
@@ -54,6 +63,27 @@ const siteLinks = [
             <span class="more-card-body">
               <strong>{{ friend.title }}</strong>
               <span>{{ friend.description }}</span>
+            </span>
+            <span class="more-card-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="more-section" aria-labelledby="more-tools">
+        <h2 id="more-tools"><span class="more-section-mark" aria-hidden="true">//</span> 工具</h2>
+        <div class="more-grid">
+          <a
+            v-for="tool in tools"
+            :key="tool.title"
+            class="more-card"
+            :href="tool.href"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="more-card-icon more-card-icon--mono">{{ tool.mono }}</span>
+            <span class="more-card-body">
+              <strong>{{ tool.title }}</strong>
+              <span>{{ tool.description }}</span>
             </span>
             <span class="more-card-arrow" aria-hidden="true">↗</span>
           </a>
