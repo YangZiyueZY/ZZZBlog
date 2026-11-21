@@ -19,6 +19,6 @@ public/img/profile/
 
 ## 新增/替换后
 
-- 开发：重新运行 `pnpm dev`（或在运行中的 dev 下刷新；构建期清单在启动时生成）
+- 开发：停止并重新运行 `pnpm dev`（图片清单在启动时生成；运行中的 dev 不会自动扫描新文件）
 - 构建：`pnpm build`，然后刷新页面
 - 预览/PWA：重新 `pnpm build`，部署后强刷；Service Worker 更新后旧图标/图片可能仍缓存，建议无痕窗口确认
