@@ -2417,3 +2417,16 @@
     height: 3.4rem;
   }
 }
+
+/* 标题可见性：个人主页「关于」页标题在深色面板上必须为白色 */
+.profile-tools-head h2 {
+  color: #fff;
+}
+
+/* 目标站点 favicon 只有 32px：居中显示并保持像素清晰，不拉伸 */
+.more-card-icon--tool img {
+  width: 58%;
+  height: 58%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}

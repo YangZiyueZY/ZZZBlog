@@ -11,6 +11,7 @@ const tools = [
     title: '搞机工具箱 · WebADB',
     description: '全安卓通用、免 ROOT 的网页版玩机工具箱，基于 WebADB 在浏览器中连接安卓设备。',
     href: 'https://czjam.github.io/gjgjxweb/',
+    icon: '/img/tools/gjgjx.ico',
     mono: 'ADB',
   },
 ]
@@ -80,7 +81,10 @@ const siteLinks = [
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span class="more-card-icon more-card-icon--mono">{{ tool.mono }}</span>
+            <span class="more-card-icon" :class="tool.icon ? 'more-card-icon--tool' : 'more-card-icon--mono'">
+              <img v-if="tool.icon" :src="withBase(tool.icon)" :alt="tool.title" loading="lazy" decoding="async" />
+              <template v-else>{{ tool.mono }}</template>
+            </span>
             <span class="more-card-body">
               <strong>{{ tool.title }}</strong>
               <span>{{ tool.description }}</span>
