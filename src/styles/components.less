@@ -53,6 +53,12 @@
         font-size: 24rem;
         line-height: 24rem;
         overflow: hidden;
+
+        /* 移动端降字号：24rem 大字在窄屏宽度撑满后高度占比过大、易引起整页重排负担 */
+        @media (max-width: 767px) {
+          font-size: 12rem;
+          line-height: 12rem;
+        }
       }
     }
   }
@@ -98,6 +104,15 @@
   }
 
   li {
+    /* 触摸目标撑满整颗胶囊（平板竖屏 768~1023px 时裸文字点击区仅约 32×19px） */
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
     a.active {
       color: black;
     }
@@ -122,6 +137,8 @@
   visibility: hidden;
   pointer-events: none;
   transition: all .2s ease;
+  /* 容纳菜单内搜索框（导航项 w-36 = 9rem 太窄） */
+  min-width: 11.5rem;
 
   // 展开（替代原 Vue Transition fade-in）
   &.open {
@@ -144,6 +161,15 @@
 
     &:first-child {
       margin-bottom: 1rem;
+    }
+
+    /* 触摸目标撑满整颗胶囊（裸文字仅约 32×19px，低于 40px 最低标准） */
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
     }
 
     // 顶部光泽
@@ -292,12 +318,38 @@
     }
   }
 
+  /* 平板宽度（768~1023）：搜索框退出绝对居中，改为弹性占位，
+     否则会与右侧导航 / 左侧作者胶囊重叠（768px 时实测重叠约 46px） */
+  &.search-box-inline {
+    @media (min-width: 768px) and (max-width: 1023px) {
+      position: static;
+      transform: none;
+      flex: 1 1 auto;
+      min-width: 0;
+      margin: 0 0.75rem;
+
+      .search-input {
+        width: 100%;
+      }
+    }
+  }
+
   /* 移动端：位于头部下方、与内容同层级的搜索栏 */
   &.search-box-bar {
     padding: 0.75rem 1rem 0.4rem;
 
     .search-input {
       width: 100%;
+    }
+  }
+
+  /* 移动端：导航菜单内的搜索入口（无搜索栏页面的全站搜索） */
+  &.search-box-menu {
+    margin: 0 0.25rem 0.6rem;
+
+    .search-input {
+      width: 100%;
+      height: 2.4rem;
     }
   }
 }
@@ -451,6 +503,13 @@
   img {
     position: relative;
     z-index: 1;
+
+    /* 移动端单列下竖版立绘（约 0.6:1）会占满整屏，统一裁切为 4:5，
+       object-position 偏上以保留人物头部；桌面端保持原比例瀑布流 */
+    @media (max-width: 767px) {
+      aspect-ratio: 4 / 5;
+      object-position: 50% 30%;
+    }
   }
 
   &.loaded .cover-loading {
@@ -513,6 +572,17 @@
   83.4%, 100% { opacity: 0; }
 }
 
+/* 移动端：返回键紧凑化（128×64 太占视口），悬浮于正文框左上。
+   个人主页有自己的 top/height 覆盖（.profile-page 前缀），不受影响。 */
+.back-button,
+.back-button_pressed {
+  @media (max-width: 767px) {
+    top: calc(var(--height-header) + 0.75rem);
+    left: 0.75rem;
+    height: 2.75rem;
+  }
+}
+
 /* ===== 文章详情页：图片放大预览（GSAP → CSS transition/keyframes） ===== */
 .image-modal {
   position: fixed;
@@ -520,6 +590,8 @@
   left: 0;
   width: 100%;
   height: 100vh;
+  /* dvh：iOS 地址栏收起时 100vh 比可视区高，弹层底部会被工具栏遮挡 */
+  height: 100dvh;
   padding-top: var(--height-header);
   overflow-y: auto;
   backdrop-filter: blur(5px);
@@ -622,7 +694,9 @@
   flex-direction: column;
   align-items: center;
   margin: 4rem auto;
-  width: max-content;
+  /* 书册投影宽 74rem，容器同步封顶；右缘书页位（-2rem）靠外层容器 padding 留出 */
+  width: 100%;
+  max-width: 74rem;
 
   .book_nav {
     position: absolute;
@@ -655,7 +729,9 @@
 
   .book_projection {
     position: relative;
-    width: 74rem;
+    /* 桌面书册 74rem；768~1250px 视口按容器宽度收缩（外层 max-w-[80rem] 需留出右侧书页位），
+       否则固定宽会在中屏被裁剪，右侧内容不可见也不可点 */
+    width: min(74rem, 100%);
     aspect-ratio: 2/1;
     filter:
         drop-shadow(-1px -1px #020202)
@@ -1085,11 +1161,31 @@
 /* ===== 文章详情页：桌面端左文右目录（双独立滚动，移动端保持原单栏） ===== */
 .article-layout {
   @media (min-width: 768px) {
-    // 视口内固定高度：外层包装 margin + 本页 padding 共两份头部高度，再扣除页脚，
-    // 使文档高度恰好等于视口（无可滚动余量，设备切换也不会残留偏移）。
+    // 视口内固定高度：外层包装 margin + 本页 padding 共两份头部高度；
+    // 正文框直接撑到视口底（页脚为悬浮层，见 .footer-auto-reveal），
     // 文章列与目录列各自内部滚动，页面本身不滚动。
-    height: calc(100vh - var(--height-header) * 2 - var(--height-footer));
-    height: calc(100dvh - var(--height-header) * 2 - var(--height-footer));
+    height: calc(100vh - var(--height-header) * 2);
+    height: calc(100dvh - var(--height-header) * 2);
+  }
+}
+
+/* ===== 文章详情页：页脚滑入（桌面端） =====
+   正文框撑满头部以下整个视口，页脚为悬浮层：平时滑出视口隐藏，
+   文章列滚动到底部时滑入、覆盖正文框下沿（正文内容已预留等高内边距，
+   最后一行不会被遮挡）。移动端页脚本就在文档流末尾，不受影响。 */
+.footer-auto-reveal {
+  @media (min-width: 768px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 45;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+
+    &.is-revealed {
+      transform: translateY(0);
+    }
   }
 }
 
@@ -1102,7 +1198,7 @@
 
   // 紧凑悬浮窗：高度由内容决定，不与文章区平齐；超过视口上限才在面板内滚动
   @media (min-width: 768px) {
-    max-height: calc(100dvh - var(--height-header) * 2 - var(--height-footer) - 2rem);
+    max-height: calc(100dvh - var(--height-header) * 2 - 2rem);
     overflow-y: auto;
     overscroll-behavior: contain;
   }
@@ -1158,6 +1254,45 @@
 @media (min-width: 768px) {
   [data-role="article-scroll"] {
     overscroll-behavior: contain;
+  }
+}
+
+/* ===== 移动端目录：悬浮按钮 + 弹出目录层（桌面端保持右侧栏） ===== */
+.toc-fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 1.5rem;
+  z-index: 45;
+  padding: 0.65rem 1.4rem;
+  background: #050505;
+  border: 3px solid #383838;
+  border-radius: 2rem;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: bold;
+  font-style: italic;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.55);
+
+  &:active {
+    border-color: #555;
+  }
+}
+
+@media (max-width: 767px) {
+  .article-toc--sheet-open {
+    display: block;
+    position: fixed;
+    top: calc(var(--height-header) + 0.75rem);
+    left: 0.75rem;
+    right: 0.75rem;
+    /* 覆盖桌面侧栏的 15.5rem 定宽，让固定定位的 left/right 拉伸生效 */
+    width: auto;
+    z-index: 60;
+    max-height: calc(100dvh - var(--height-header) - 1.5rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -1308,6 +1443,50 @@
 
   &:hover {
     border-color: #666;
+  }
+}
+
+/* 「更多操作」下拉菜单（本页无站点导航，提供真实快捷操作） */
+.profile-more-wrap {
+  position: relative;
+}
+
+.profile-more-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  display: none;
+  min-width: 9.5rem;
+  padding: 0.4rem;
+  background: #0b0b0b;
+  border: 1px solid #333;
+  border-radius: 0.8rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  z-index: 20;
+
+  &.open {
+    display: flex;
+    flex-direction: column;
+  }
+
+  a,
+  button {
+    padding: 0.55rem 0.9rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: #eee;
+    font-size: 0.92rem;
+    font-weight: bold;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #fcd642;
+    }
   }
 }
 
@@ -1810,15 +1989,23 @@
 
 /* —— 个人主页移动端 —— */
 @media (max-width: 767px) {
+  /* 页签改文档流居中：窄屏时绝对定位的页签会与左上返回键重叠（320~414px 全撞） */
   .profile-tabs {
-    top: 1.9rem;
-    right: 1rem;
+    position: static;
+    width: max-content;
+    margin: 4.5rem auto 0;
+  }
+
+  /* 返回键缩小一号（6rem 宽），底部 4rem 与页签起点 4.5rem 留出间距 */
+  .profile-page .back-button,
+  .profile-page .back-button_pressed {
+    height: 3rem;
   }
 
   .profile-panel,
   .profile-keeper {
     width: calc(100% - 1.5rem);
-    margin-top: 4.6rem;
+    margin-top: 1.25rem;
     padding: 1rem;
   }
 
@@ -1862,11 +2049,65 @@
     font-size: 0.95rem;
   }
 
-  .profile-keeper {
+  /* 特异性必须与桌面规则 .profile-keeper:not(.hidden) 完全一致，
+     否则桌面的 20rem+1fr 双列会压过这里——权益面板会被挤出视口
+     （实测 375px：权益面板 left 372 / 宽仅 49px，完全不可见） */
+  .profile-keeper:not(.hidden) {
     grid-template-columns: 1fr;
   }
 
-  .profile-benefit-list {
-    max-height: 55vh;
+  /* 档案徽章：桌面 1:1.05 方形在手机上过高（占掉半张卡）。
+     注意不能只改 aspect-ratio——flex 主轴尺寸由内容决定，内部方形 svg 会把
+     容器顶成正方形；这里用显式高度，svg 按百分比取尺寸。 */
+  .profile-keeper-emblem {
+    aspect-ratio: auto;
+    height: 9.5rem;
+
+    svg {
+      width: auto;
+      height: 78%;
+    }
   }
+
+  /* 权益列表：移动端去掉内嵌滚动上限与滚动箭头，改为整页自然滚动（触屏下滑更顺手） */
+  .profile-benefit-list {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .profile-benefit-arrow {
+    display: none;
+  }
+
+  .profile-benefit-value {
+    padding: 0.45rem 1.1rem;
+  }
+
+  .profile-max-mark {
+    right: 0.75rem;
+    bottom: 2.2rem;
+    font-size: 4rem;
+    -webkit-text-stroke-width: 2px;
+  }
+}
+
+/* ===== 文章详情页：桌面端锁定页面滚动（DefaultLayout 的 isArticle 加 class） ===== */
+@media (min-width: 768px) {
+  html.article-view,
+  body.article-view {
+    overflow: hidden !important;
+    overflow: clip !important;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-role='article-scroll'] .markdown-body:not(.custom) {
+    padding-top: 3.5rem;
+  }
+}
+
+/* ===== 搜索下拉定位：bar/menu 变体需要自身作为绝对定位参照 ===== */
+.search-box-bar,
+.search-box-menu {
+  position: relative;
 }

@@ -5,7 +5,8 @@
 export const authorInfo = {
     name: 'KingDove',
     birth: '2005-04-29',
-    avatar: 'https://q.qlogo.cn/headimg_dl?dst_uin=2097853195&spec=4',
+    /** 头像已本地化（public/img/avatar.jpg，源：QQ 头像服务），避免外链加载失败；使用处需经 withBase() */
+    avatar: '/img/avatar.jpg',
     email: 'zamyang@qq.com',
     uid: '2097853195',
 } as const;

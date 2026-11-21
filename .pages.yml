@@ -1,6 +1,6 @@
 # Pages CMS 配置（https://pagescms.org/docs/configuration/）
 # 在 https://app.pagescms.org 用 GitHub 账号连接本仓库后即可在网页端管理文章。
-# 文章存储：src/content/articles/（schemas 见 src/content.config.ts）
+# 文章存储：src/content/articles/（schemas 见 src/content/schema.ts）
 # 封面图存储：public/img/（写入 frontmatter 时以 /img 前缀引用，与现有 cover 格式一致）
 
 media:

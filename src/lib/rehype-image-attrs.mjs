@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
  * 构建期为 markdown 图片补上固有尺寸（防 CLS），并把 public/ 下的本地图片
  * 补上部署子路径（站点部署在子路径时，/img/x.webp 需变成 /ZZZBlog/img/x.webp）。
  * 懒加载 / 异步解码由 Astro 原生提供；外链跳过。
- * 注意：Astro 5 会缓存内容渲染结果（node_modules/.astro），改动本插件后需清缓存重建。
+ * 注意：内容构建结果会缓存到 .content/，改动本插件后需重新运行内容构建。
  *
  * @param {{ base?: string }} [options] 部署子路径，如 '/ZZZBlog'（默认根域部署）
  */

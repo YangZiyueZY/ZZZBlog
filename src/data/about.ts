@@ -8,29 +8,29 @@ export const aboutInfo: AboutGroup[] = [
                 title: '技术栈',
                 item: [
                     {
-                        title: 'Astro',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Astro.svg',
-                        description: '本博客的核心框架，负责静态站点生成与路由。文章由内容集合（Content Collections）管理，搜索索引、RSS 订阅与站点地图均在构建期生成。'
+                        title: 'Vue 3',
+                        url: '/img/icons/vuejs-dark.svg',
+                        description: '本博客的 UI 框架，配合 Vue Router 管理页面与交互；vite-ssg 在构建期把每个路由预渲染成静态 HTML，保留 SEO 与首屏体验。'
                     },
                     {
                         title: 'TypeScript',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/TypeScript.svg',
-                        description: '全站组件、脚本与配置均使用 TypeScript 编写，配合 astro check 在开发期完成静态类型检查，减少运行时错误。'
+                        url: '/img/icons/typescript.svg',
+                        description: '全站组件、脚本与配置均使用 TypeScript 编写，配合 vue-tsc 完成静态类型检查，减少运行时错误。'
                     },
                     {
                         title: 'Tailwind CSS',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/TailwindCSS-Dark.svg',
+                        url: '/img/icons/tailwindcss-dark.svg',
                         description: '原子化 CSS 框架，通过工具类完成布局、间距与响应式适配，与 Less 共同负责全站样式。'
                     },
                     {
                         title: 'Less',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Less-Dark.svg',
+                        url: '/img/icons/less-dark.svg',
                         description: 'CSS 预处理器，用于编写组件级样式、选择器层级与主题变量，配合 Tailwind 处理更复杂的样式逻辑。'
                     },
                     {
                         title: 'Markdown',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Markdown-Dark.svg',
-                        description: '文章内容全部以 Markdown 编写，经 Content Collections 在构建期解析校验，并通过 remark-math 与 KaTeX 渲染数学公式。'
+                        url: '/img/icons/markdown-dark.svg',
+                        description: '文章内容全部以 Markdown 编写，构建期经 zod 校验与 unified 管线渲染，并通过 remark-math 与 KaTeX 渲染数学公式。'
                     },
                 ]
             },
@@ -39,22 +39,22 @@ export const aboutInfo: AboutGroup[] = [
                 item: [
                     {
                         title: 'Git',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Git.svg',
+                        url: '/img/icons/git.svg',
                         description: '代码版本管理工具，支持分支管理、代码合并与远程协作。'
                     },
                     {
                         title: 'Vite',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Vite-Dark.svg',
-                        description: 'Astro 底层的构建工具，开发期提供 HMR 热更新与依赖预构建，并通过 vite-plugin-pwa 为站点提供离线缓存。'
+                        url: '/img/icons/vite-dark.svg',
+                        description: 'Vue 应用的构建工具，开发期提供 HMR 与依赖预构建；构建期由 vite-ssg 预渲染页面，并通过 vite-plugin-pwa 提供离线缓存。'
                     },
                     {
                         title: 'pnpm',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Pnpm-Dark.svg',
+                        url: '/img/icons/pnpm-dark.svg',
                         description: '本项目的包管理器，负责依赖安装与脚本管理（dev / build / preview 等）。'
                     },
                     {
                         title: 'GitHub Actions',
-                        url: 'https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/GithubActions-Dark.svg',
+                        url: '/img/icons/githubactions-dark.svg',
                         description: 'CI/CD 自动化部署：push 到主分支后自动执行构建，并将产物发布到 GitHub Pages。'
                     },
                 ]
@@ -70,7 +70,7 @@ export const aboutInfo: AboutGroup[] = [
                     {
                         title: 'Paper2Galgame',
                         url: 'https://paper2gal.com',
-                        icon: 'https://paper2gal.com/apple-touch-icon.png',
+                        icon: '/img/friends/paper2gal.png',
                         description: 'AI 驱动的论文学习工具：把学术论文转化为互动视觉小说，上传 PDF 即可与动漫搭档对话，让研读文献更有代入感。'
                     },
                     {

@@ -1,5 +1,24 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@shared/*": ["src/*"]
+    },
+    "types": ["vite/client", "node"],
+    "strict": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.vue",
+    "app/**/*.d.ts",
+    "src/config/**/*.ts",
+    "src/data/**/*.ts",
+    "src/types/**/*.ts",
+    "vite.config.ts"
+  ]
 }

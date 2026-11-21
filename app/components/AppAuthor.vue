@@ -1,0 +1,30 @@
+<script setup lang="ts">
+import { authorInfo, withBase } from '../../src/config/site'
+
+const birthday = new Date(authorInfo.birth)
+const now = new Date(__BUILD_TIME__)
+const days = Math.ceil((now.getTime() - birthday.getTime()) / 86400000)
+const level = Math.floor(days / 365)
+const currentExp = days
+const totalExp = (level + 1) * 365
+const expPercentage = (currentExp / totalExp) * 100
+</script>
+
+<template>
+  <div class="author">
+    <RouterLink :to="'/profile/'" class="h-full aspect-square border-[3px] border-black rounded-full overflow-hidden shrink-0" title="个人主页">
+      <img class="w-full h-full object-cover" :src="withBase(authorInfo.avatar)" alt="User Avatar" loading="eager" decoding="async" />
+    </RouterLink>
+    <div class="flex max-[312px]:hidden grow flex-col justify-center gap-[.2rem]">
+      <div class="mb-[.2rem] leading-4 text-[1rem] font-bold">{{ authorInfo.name }}</div>
+      <div class="exp-bar">
+        <div class="absolute top-[-1px] left-[-1px] h-[calc(100%+2px)] bg-gradient-to-r from-[#4663fd] to-[#14c7ff] rounded-[.4rem]" :style="{ width: `${expPercentage}%` }"></div>
+        <div class="absolute top-1/2 left-0 -translate-y-1/2 text-[1rem] leading-4 text-white z-[1]">{{ currentExp }}/{{ totalExp }}</div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center mr-4 ml-2 shrink-0">
+      <div class="leading-[1.8rem] text-[1.8rem] font-black">{{ level }}</div>
+      <div class="leading-[.6rem] text-[.6rem] text-[rgba(255,255,255,.6)]">LEVEL</div>
+    </div>
+  </div>
+</template>

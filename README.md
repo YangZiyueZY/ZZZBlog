@@ -1,8 +1,11 @@
 <div align="center">
 
+> ⚠️ 本分支已完成 Astro → Vue 3 + Vite SSG 重构（P2/P3 进行中）。下方 README 仍保留 Astro 时期的说明，P5 会整体重写。
+
 <img src="assets/readme/hero.svg" alt="Z-BLOG — 以《绝区零》绳网为视觉原型的纯静态博客" width="100%"/>
 
-[![Astro](https://img.shields.io/badge/Astro-5-BC52EE?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
+[![Vue](https://img.shields.io/badge/Vue-3-42b883?style=flat-square&logo=vue.js&logoColor=white)](https://vuejs.org)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![PWA](https://img.shields.io/badge/PWA-离线可用-5A0FC8?style=flat-square&logo=pwa&logoColor=white)](https://developer.mozilla.org/docs/Web/Progressive_web_apps)

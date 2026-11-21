@@ -32,11 +32,7 @@
     padding: 1.8rem;
 
     @media (max-width: 767px) {
-      padding: 1rem;
-    }
-
-    @media (max-width: 480px) {
-      padding: 0.5rem;
+      padding: 0.875rem 1rem 1.25rem;
     }
   }
 
@@ -55,6 +51,13 @@
       border: 4px solid black;
       cursor: zoom-in;
     }
+  }
+
+  /* KaTeX 独立公式：长公式在窄屏不允许撑破布局，可横向滚动 */
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.25rem 0;
   }
 
   /* 标题样式 start
@@ -190,6 +193,8 @@
 
     @media (max-width: 640px) {
       display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border: none;
     }
 
@@ -216,11 +221,13 @@
 
   /* 代码块样式 start
     --------------------------------------------------- */
-  // Shiki 输出 <pre class="astro-code">，样式与原 hljs 代码块保持一致
+  // Shiki 输出 <pre class="shiki">，样式与原 hljs 代码块保持一致
   pre {
     position: relative;
     margin-bottom: var(--line-margin);
     padding-top: 2.5rem;
+    // Shiki 4 不再输出内联 overflow-x，长代码行需在此横向滚动
+    overflow-x: auto;
     // 原版代码块为纯黑背景（覆盖 Shiki 主题底色）
     background: #000000 !important;
     border-radius: 10px;
@@ -300,6 +307,17 @@
 
     &:hover .code-copy-btn {
       opacity: 1;
+    }
+
+    /* 触屏设备无 hover：复制按钮与语言标签常显，否则移动端永远看不到「复制」 */
+    @media (hover: none) {
+      .code-copy-btn {
+        opacity: 1;
+      }
+
+      &::before {
+        opacity: 1;
+      }
     }
   }
 

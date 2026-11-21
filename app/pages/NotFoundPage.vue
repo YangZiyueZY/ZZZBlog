@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import DefaultLayout from '../layouts/DefaultLayout.vue'
+import { siteConfig } from '../../src/config/site'
+</script>
+
+<template>
+  <DefaultLayout :title="`404 - ${siteConfig.blogName}`" description="页面不存在">
+    <div class="relative flex flex-col items-center justify-center min-h-[80vh] gap-6 px-4 text-center">
+      <div class="text-[4.5rem] font-black italic leading-none bg-gradient-to-r from-[#F1D801] to-[#6bbd00] bg-clip-text text-transparent">404</div>
+      <p class="text-white text-[1.15rem] font-bold">页面不存在或已被移除</p>
+      <RouterLink to="/article/" class="inline-flex items-center justify-center h-[2.6rem] px-6 text-white font-bold italic bg-[#050505] border-[3px] border-[#383838] rounded-[2rem] shadow-[0_0_0_1px_rgba(255,255,255,.1),inset_0_0_4px_rgba(0,0,0,1)] hover:text-[#808080] transition-colors">← 返回文章列表</RouterLink>
+    </div>
+  </DefaultLayout>
+</template>

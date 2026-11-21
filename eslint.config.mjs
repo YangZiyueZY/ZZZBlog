@@ -1,39 +1,68 @@
 // @ts-check
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import astro from 'eslint-plugin-astro';
-import { parseForESLint as astroParse } from 'astro-eslint-parser';
-import tsParser from '@typescript-eslint/parser';
+import js from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import pluginVue from 'eslint-plugin-vue'
+import vueParser from 'vue-eslint-parser'
 
 export default [
-    { ignores: ['dist/**', 'node_modules/**', '.astro/**', '.github/**', 'public/**', 'demo/**'] },
+    { ignores: ['dist/**', 'node_modules/**', '.content/**', '.vite-ssg-temp/**', '.agents/**', '.astro/**', 'public/**', 'demo/**', 'docs/**'] },
     js.configs.recommended,
     ...tseslint.configs.recommended,
-    ...astro.configs.recommended,
+    ...pluginVue.configs['flat/essential'],
     {
-        files: ['**/*.astro'],
+        files: ['**/*.vue'],
         languageOptions: {
-            parser: { parseForESLint: astroParse },
+            parser: vueParser,
             parserOptions: {
-                parser: tsParser,
-                extraFileExtensions: ['.astro'],
+                parser: tseslint.parser,
+                sourceType: 'module',
+                extraFileExtensions: ['.vue'],
+            },
+            globals: {
+                window: 'readonly',
+                document: 'readonly',
+                navigator: 'readonly',
+                history: 'readonly',
+                location: 'readonly',
+                console: 'readonly',
+                setTimeout: 'readonly',
+                requestAnimationFrame: 'readonly',
+                IntersectionObserver: 'readonly',
+                ResizeObserver: 'readonly',
             },
         },
     },
     {
-        // Node.js 环境的构建/配置文件（CJS/ESM 均适用）
-        files: ['**/*.cjs', '**/*.mjs', 'scripts/**'],
+        files: ['**/*.ts', '**/*.mjs', 'scripts/**'],
         languageOptions: {
             globals: {
-                module: 'readonly',
-                require: 'readonly',
                 process: 'readonly',
                 Buffer: 'readonly',
                 console: 'readonly',
-                __dirname: 'readonly',
-                __filename: 'readonly',
-                global: 'readonly',
+                URL: 'readonly',
+                module: 'readonly',
+                require: 'readonly',
             },
         },
     },
-];
+    {
+        files: ['**/*.{ts,vue}'],
+        rules: {
+            // TypeScript 负责全局类型检查，ESLint 的 no-undef 对 DOM/define 常量会误报
+            'no-undef': 'off',
+            '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true, argsIgnorePattern: '^_' }],
+        },
+    },
+    {
+        files: ['**/*.cjs'],
+        languageOptions: {
+            globals: { module: 'readonly', require: 'readonly', __dirname: 'readonly', process: 'readonly' },
+        },
+    },
+    {
+        rules: {
+            'vue/multi-word-component-names': 'off',
+            '@typescript-eslint/no-explicit-any': 'off',
+        },
+    },
+]

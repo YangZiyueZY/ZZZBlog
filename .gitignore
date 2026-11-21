@@ -30,3 +30,8 @@ ssl/
 .astro/
 .zcode/
 .mimosa/
+.content/
+.vite-ssg-temp/
+
+# Local package manager config（本机代理等，勿提交）
+.npmrc

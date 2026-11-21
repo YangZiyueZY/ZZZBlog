@@ -82,3 +82,14 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== 页面内容包装层 =====
+   overflow: hidden 会把所有后代变成 sticky 的失效定位上下文，
+   导致关于页移动端的标签吸顶（position: sticky）完全失效；
+   clip 同样裁掉装饰性越界，却不影响 sticky。桌面端仍保持 hidden
+   以兼容文章页双独立滚动面板的定位方案。 */
+.page-shell {
+  @media (max-width: 767px) {
+    overflow: clip;
+  }
+}
