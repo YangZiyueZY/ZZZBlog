@@ -11,6 +11,13 @@
   padding: 0.5rem;
 }
 
+/* 桌面端保留原版右上角导航，不显示移动端折叠按钮 */
+@media (min-width: 768px) {
+  .mobile-menu-wrapper {
+    display: none;
+  }
+}
+
 .mobile-menu {
   display: flex;
   flex-direction: column;
