@@ -2,6 +2,7 @@
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { ref } from 'vue'
 import { authorInfo, siteConfig, withBase } from '../../src/config/site'
+import { aboutInfo } from '../../src/data/about'
 import { useBackButton } from '../composables/useBackButton'
 import { useProfilePage } from '../composables/useProfilePage'
 
@@ -20,6 +21,9 @@ const signDate = __BUILD_DATE_LABEL__
 
 // 文章数量：P2 改为内容层注入（届时从内容集合统计替换此常量）
 const articleCount = 14
+
+// 「工具」页签内容：从原「关于我」分组迁移，含技术栈与构建部署
+const toolsGroup = aboutInfo.find((group) => group.title === '工具') ?? aboutInfo[0]
 
 const backPressed = ref<HTMLElement>()
 const { onBack } = useBackButton(backPressed)
@@ -78,6 +82,10 @@ const actions = [
           <span>绳匠档案</span>
           <div class="bg absolute top-1/2 left-1/2 w-[9.5rem] h-[2.5rem] rounded-[.5rem_1rem] -translate-x-1/2 -translate-y-1/2 skew-x-[var(--inclination-degree)] z-[-1]"></div>
         </button>
+        <button type="button" data-role="profile-tab" data-view="tools" aria-selected="false">
+          <span>工具</span>
+          <div class="bg absolute top-1/2 left-1/2 w-[9.5rem] h-[2.5rem] rounded-[.5rem_1rem] -translate-x-1/2 -translate-y-1/2 skew-x-[var(--inclination-degree)] z-[-1]"></div>
+        </button>
       </div>
 
       <!-- ===== 视图一：个人主页 ===== -->
@@ -95,7 +103,7 @@ const actions = [
             <button type="button" class="profile-more" data-role="more-toggle" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-more-menu">更多操作</button>
             <div id="profile-more-menu" class="profile-more-menu" role="menu" aria-label="更多操作">
               <a role="menuitem" :href="withBase('/article/')">文章列表</a>
-              <a role="menuitem" :href="withBase('/about/')">关于本站</a>
+              <a role="menuitem" :href="withBase('/about/')">更多</a>
               <a role="menuitem" :href="withBase('/rss.xml')">RSS 订阅</a>
               <button role="menuitem" type="button" data-role="share-copy">复制本页链接</button>
             </div>
@@ -227,6 +235,31 @@ const actions = [
           <span class="profile-max-mark" aria-hidden="true">MAX</span>
           <p class="profile-benefit-note">绳网声望已达到最大级</p>
           <button type="button" class="profile-benefit-disabled" disabled>绳网声望已达到最大级</button>
+        </div>
+      </section>
+
+      <!-- ===== 视图三：工具（原「关于我」内容） ===== -->
+      <section data-role="profile-view" data-view="tools" class="profile-panel profile-tools hidden" aria-label="工具">
+        <div class="profile-tools-head">
+          <div>
+            <span class="profile-tools-en" aria-hidden="true">TOOLKIT</span>
+            <h2>工具</h2>
+          </div>
+          <p>建站技术栈与常用工具，按「技术栈 / 构建与部署」分组。</p>
+        </div>
+        <div class="profile-tools-groups">
+          <section v-for="column in toolsGroup.item" :key="column.title" class="profile-tool-group">
+            <h3>{{ column.title }}</h3>
+            <div class="profile-tool-grid">
+              <article v-for="item in column.item" :key="item.title" class="profile-tool-card">
+                <img :src="withBase(item.icon ?? item.url)" :alt="item.title" loading="lazy" decoding="async" />
+                <div class="profile-tool-body">
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.description }}</p>
+                </div>
+              </article>
+            </div>
+          </section>
         </div>
       </section>
     </div>

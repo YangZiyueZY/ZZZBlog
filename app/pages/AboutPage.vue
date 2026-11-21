@@ -1,14 +1,78 @@
 <script setup lang="ts">
 import DefaultLayout from '../layouts/DefaultLayout.vue'
-import AboutBook from '../components/AboutBook.vue'
-import { siteConfig } from '../../src/config/site'
+import { aboutInfo } from '../../src/data/about'
+import { authorInfo, siteConfig, withBase } from '../../src/config/site'
+
+const friendGroup = aboutInfo.find((group) => group.title === '友链')
+const friends = friendGroup?.item.flatMap((column) => column.item) ?? []
+
+const siteLinks = [
+  {
+    title: 'RSS 订阅',
+    description: '用阅读器订阅本站，文章更新自动送达。',
+    href: withBase('/rss.xml'),
+    mono: 'RSS',
+  },
+  {
+    title: 'GitHub',
+    description: '本站源码与后续更新都在这里。',
+    href: 'https://github.com/yang-zhihang',
+    mono: 'GH',
+  },
+  {
+    title: '邮件联系',
+    description: authorInfo.email,
+    href: `mailto:${authorInfo.email}`,
+    mono: '@',
+  },
+]
 </script>
 
 <template>
-  <DefaultLayout :title="`关于 - ${siteConfig.blogName}`" :description="siteConfig.description">
-    <!-- 桌面端留出书册右缘「书页位」（book_page 右伸 2rem）所需的水平边距 -->
-    <div class="mx-auto w-full max-w-[80rem] md:px-10">
-      <AboutBook />
+  <DefaultLayout :title="`更多 - ${siteConfig.blogName}`" :description="`${siteConfig.blogName} 的友链与更多入口`">
+    <div class="more-page">
+      <header class="more-hero">
+        <span class="more-hero-en" aria-hidden="true">MORE</span>
+        <h1>更多</h1>
+        <p>友链、订阅与联系入口。想交换友链，欢迎邮件联系。</p>
+      </header>
+
+      <section class="more-section" aria-labelledby="more-friends">
+        <h2 id="more-friends"><span class="more-section-mark" aria-hidden="true">//</span> 友链</h2>
+        <div class="more-grid">
+          <a
+            v-for="friend in friends"
+            :key="friend.title"
+            class="more-card"
+            :href="friend.url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="more-card-icon">
+              <img :src="withBase(friend.icon ?? friend.url)" :alt="friend.title" loading="lazy" decoding="async" />
+            </span>
+            <span class="more-card-body">
+              <strong>{{ friend.title }}</strong>
+              <span>{{ friend.description }}</span>
+            </span>
+            <span class="more-card-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="more-section" aria-labelledby="more-links">
+        <h2 id="more-links"><span class="more-section-mark" aria-hidden="true">//</span> 站点入口</h2>
+        <div class="more-grid">
+          <a v-for="link in siteLinks" :key="link.title" class="more-card" :href="link.href">
+            <span class="more-card-icon more-card-icon--mono">{{ link.mono }}</span>
+            <span class="more-card-body">
+              <strong>{{ link.title }}</strong>
+              <span>{{ link.description }}</span>
+            </span>
+            <span class="more-card-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
     </div>
   </DefaultLayout>
 </template>

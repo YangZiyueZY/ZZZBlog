@@ -2,7 +2,7 @@ import type { AboutGroup } from '../types/about'
 
 export const aboutInfo: AboutGroup[] = [
     {
-        title: '关于我',
+        title: '工具',
         item: [
             {
                 title: '技术栈',
