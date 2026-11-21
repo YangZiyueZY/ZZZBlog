@@ -33,8 +33,8 @@ export default defineConfig({
       new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric' }).format(new Date()).replace('/', '月') + '日',
     ),
   },
-  server: { host: true, port: 4322 },
-  preview: { host: true },
+  server: { host: true, port: 4321 },
+  preview: { host: true, port: 4174 },
   plugins: [
     vue(),
     VitePWA({
