@@ -1160,7 +1160,7 @@
 
 /* ===== 文章详情页：桌面端左文右目录（双独立滚动，移动端保持原单栏） ===== */
 .article-layout {
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     // 视口内固定高度：外层包装 margin + 本页 padding 共两份头部高度；
     // 正文框直接撑到视口底（页脚为悬浮层，见 .footer-auto-reveal），
     // 文章列与目录列各自内部滚动，页面本身不滚动。
@@ -1174,7 +1174,7 @@
    文章列滚动到底部时滑入、覆盖正文框下沿（正文内容已预留等高内边距，
    最后一行不会被遮挡）。移动端页脚本就在文档流末尾，不受影响。 */
 .footer-auto-reveal {
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -1197,7 +1197,7 @@
   border-radius: 1rem;
 
   // 紧凑悬浮窗：高度由内容决定，不与文章区平齐；超过视口上限才在面板内滚动
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     max-height: calc(100dvh - var(--height-header) * 2 - 2rem);
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -1251,7 +1251,7 @@
 }
 
 /* 文章列容器：滚轮只推动文章本身，不把页面/目录带动 */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   [data-role="article-scroll"] {
     overscroll-behavior: contain;
   }
@@ -2092,7 +2092,7 @@
 }
 
 /* ===== 文章详情页：桌面端锁定页面滚动（DefaultLayout 的 isArticle 加 class） ===== */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   html.article-view,
   body.article-view {
     overflow: hidden !important;
@@ -2102,7 +2102,7 @@
 
 @media (max-width: 767px) {
   [data-role='article-scroll'] .markdown-body:not(.custom) {
-    padding-top: 3.5rem;
+    padding-top: 0.5rem;
   }
 }
 
@@ -2430,4 +2430,185 @@
   height: 58%;
   object-fit: contain;
   image-rendering: pixelated;
+}
+
+/* ===== 文章详情页布局 v2：正文更宽，目录收窄为侧栏 ===== */
+.article-page {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 0.5rem;
+}
+
+.article-layout {
+  display: block;
+}
+
+.article-panel {
+  color: #fff;
+  background: #1e1e1e;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 1.1rem;
+  padding: 3.75rem 1rem 0.9rem;
+  border-bottom: 1px solid #333;
+  color: #9a9a9a;
+  font-size: 0.78rem;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+.article-meta__dates,
+.article-meta__stats,
+.article-meta__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+}
+
+.article-meta__stats {
+  margin-left: auto;
+}
+
+.article-meta__dates span + span::before,
+.article-meta__stats span + span::before {
+  content: '/';
+  margin-right: 0.55rem;
+  color: #555;
+}
+
+.article-tag {
+  padding: 0.1rem 0.55rem;
+  border: 1px solid #3a3a3a;
+  border-radius: 999px;
+  color: #cfcfcf;
+  font-size: 0.72rem;
+}
+
+.article-panel .markdown-body {
+  padding: 0.9rem 1rem 1.5rem;
+}
+
+/* 桌面：正文占满剩余宽度，目录 13.5rem；无目录时正文独享整行 */
+@media (min-width: 1024px) {
+  .article-page {
+    padding-top: var(--height-header);
+  }
+
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 13.5rem;
+    gap: 1.5rem;
+    width: min(100%, 100rem);
+    height: calc(100dvh - var(--height-header) * 2);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    align-items: start;
+  }
+
+  .article-layout--full {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .article-panel {
+    height: 100%;
+    overflow-y: auto;
+    border: 4px solid #000;
+    border-radius: 1.25rem;
+    font-size: 1.25rem;
+  }
+
+  .article-meta {
+    padding: 1.5rem clamp(1.5rem, 2.4vw, 2.75rem) 1rem;
+  }
+
+  .article-panel .markdown-body {
+    padding: 2.25rem clamp(1.5rem, 2.4vw, 2.75rem) calc(var(--height-footer) + 1.5rem);
+  }
+
+  .article-toc {
+    display: block;
+    position: static;
+    width: 13.5rem;
+    max-height: calc(100dvh - var(--height-header) * 2 - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .toc-fab {
+    display: none;
+  }
+
+  .article-page .back-button,
+  .article-page .back-button_pressed {
+    top: calc(var(--height-header) + 1rem);
+    left: 1.25rem;
+    height: 3rem;
+  }
+}
+
+/* 1024~1199：目录收起为浮层，正文仍占满整行 */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .article-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .article-toc:not(.article-toc--sheet-open) {
+    display: none;
+  }
+
+  .article-toc--sheet-open {
+    display: block;
+    position: fixed;
+    top: calc(var(--height-header) + 0.75rem);
+    right: 0.75rem;
+    left: auto;
+    width: min(20rem, calc(100% - 1.5rem));
+    max-height: calc(100dvh - var(--height-header) - 1.5rem);
+    overflow-y: auto;
+    z-index: 60;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  .toc-fab {
+    display: block;
+  }
+}
+
+/* 移动端/平板：全宽正文，去掉边框与圆角 */
+@media (max-width: 1023px) {
+  .article-panel {
+    border: 0;
+    border-radius: 0;
+  }
+
+  .article-toc:not(.article-toc--sheet-open) {
+    display: none;
+  }
+
+  .article-toc--sheet-open {
+    display: block;
+    position: fixed;
+    top: calc(var(--height-header) + 0.75rem);
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    max-height: calc(100dvh - var(--height-header) - 1.5rem);
+    overflow-y: auto;
+    z-index: 60;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  .toc-fab {
+    display: block;
+  }
 }

@@ -33,7 +33,7 @@ export function useArticleToc(root: Ref<HTMLElement | undefined>) {
     }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const desktop = window.matchMedia('(min-width: 768px)')
+    const desktop = window.matchMedia('(min-width: 1024px)')
     const fab = el.querySelector<HTMLButtonElement>('.toc-fab')
     const setSheet = (open: boolean) => {
       toc.classList.toggle('article-toc--sheet-open', open)
@@ -100,7 +100,7 @@ export function useArticleToc(root: Ref<HTMLElement | undefined>) {
       headings.forEach((heading) => observer!.observe(heading))
     }
 
-    const desktopQuery = window.matchMedia('(min-width: 768px)')
+    const desktopQuery = window.matchMedia('(min-width: 1024px)')
     const forceResetPageScroll = () => {
       if (!desktopQuery.matches) return
       window.scrollTo({ top: 0, behavior: 'auto' })

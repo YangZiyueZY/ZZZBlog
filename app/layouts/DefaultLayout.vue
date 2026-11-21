@@ -99,7 +99,7 @@ useHead({
       class="page-shell relative w-full min-h-[100vh] overflow-hidden"
       :class="[
         { 'mt-[var(--height-header)]': !hideHeader },
-        { 'md:h-[calc(100dvh-var(--height-header))] md:min-h-[0]': fitViewport },
+        { 'lg:h-[calc(100dvh-var(--height-header))] lg:min-h-[0]': fitViewport },
       ]"
     >
       <SearchBox v-if="isArticlePage && !hideMobileSearch" variant="bar" />

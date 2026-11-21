@@ -14,6 +14,9 @@ const id = Number(route.params.id)
 const article = computed(() => getArticleIndex(id))
 const meta = computed(() => article.value?.meta)
 const headings = computed(() => (article.value?.headings ?? []).filter((item) => item.depth >= 2 && item.depth <= 3))
+const readingTime = computed(() => article.value?.readingTime ?? 1)
+const wordCount = computed(() => article.value?.wordCount ?? 0)
+const formatDate = (value: string) => value.slice(0, 10)
 
 const html = ref(getCachedArticleHtml(id) ?? (prerenderedArticle.id === id ? prerenderedArticle.html : ''))
 const backPressed = ref<HTMLElement>()
@@ -45,19 +48,30 @@ onMounted(async () => {
     :published-time="meta.createTime"
     :updated-time="meta.modifiedTime"
   >
-    <div ref="detailRoot" class="relative min-h-[100vh] md:min-h-[0] pt-2 md:pt-[var(--height-header)]">
-      <button class="back-button" type="button" aria-label="返回上一页" @click="onBack"></button>
-      <div ref="backPressed" class="back-button_pressed"></div>
+    <div ref="detailRoot" class="article-page">
+      <button class="back-button article-back" type="button" aria-label="返回上一页" @click="onBack"></button>
+      <div ref="backPressed" class="back-button_pressed article-back-pressed"></div>
 
-      <div class="article-layout md:mx-auto md:flex md:max-w-[76rem] md:items-start md:gap-x-6 md:px-8">
-        <article
-          data-role="article-scroll"
-          class="md:flex-1 md:min-w-0 md:self-stretch md:overflow-y-auto md:p-5 md:pb-[calc(var(--height-footer)+1.25rem)] sm:m-0 sm:p-2 text-xl text-white bg-[#1e1e1e] md:rounded-2xl sm:rounded-none border-4 border-black"
-        >
+      <div class="article-layout" :class="{ 'article-layout--full': !headings.length }">
+        <article data-role="article-scroll" class="article-panel">
+          <header class="article-meta">
+            <div class="article-meta__dates">
+              <span>{{ formatDate(meta.createTime) }}</span>
+              <span v-if="meta.modifiedTime !== meta.createTime">更新 {{ formatDate(meta.modifiedTime) }}</span>
+            </div>
+            <div class="article-meta__stats">
+              <span>{{ readingTime }} 分钟</span>
+              <span>{{ wordCount }} 字</span>
+              <span>{{ meta.views }} 浏览</span>
+            </div>
+            <div v-if="meta.tags.length" class="article-meta__tags">
+              <span v-for="tag in meta.tags" :key="tag" class="article-tag">{{ tag }}</span>
+            </div>
+          </header>
           <div class="markdown-body" data-article-body :data-article-id="id" v-html="html"></div>
         </article>
 
-        <aside v-if="headings.length" id="article-toc" class="article-toc hidden md:block shrink-0" data-role="article-toc" aria-label="文章目录">
+        <aside v-if="headings.length" id="article-toc" class="article-toc" data-role="article-toc" aria-label="文章目录">
           <span class="article-toc__label">目录</span>
           <nav>
             <a
@@ -71,7 +85,7 @@ onMounted(async () => {
         </aside>
       </div>
 
-      <button v-if="headings.length" class="toc-fab md:hidden" type="button" aria-label="打开文章目录" aria-expanded="false" aria-controls="article-toc">目录</button>
+      <button v-if="headings.length" class="toc-fab" type="button" aria-label="打开文章目录" aria-expanded="false" aria-controls="article-toc">目录</button>
 
       <div class="image-modal" id="image-modal" aria-hidden="true" role="dialog" aria-label="图片预览">
         <button class="close-button" type="button" aria-label="关闭图片预览"></button>
