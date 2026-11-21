@@ -1,8 +1,8 @@
 import { onBeforeUnmount, onMounted, type Ref } from 'vue'
 
 /**
- * 文章目录：桌面双面板滚动、点击跳转、滚动高亮、移动端浮层、设备切换复位。
- * 逻辑与重构前的 article-toc.ts 一致。
+ * 文章目录：窗口滚动、点击跳转、滚动高亮、移动端底部抽屉。
+ * 新版页面是正常文档流，因此不再使用内部滚动容器。
  */
 export function useArticleToc(root: Ref<HTMLElement | undefined>) {
   const cleanups: Array<() => void> = []
@@ -11,8 +11,7 @@ export function useArticleToc(root: Ref<HTMLElement | undefined>) {
     const el = root.value
     if (!el) return
     const toc = el.querySelector<HTMLElement>('[data-role="article-toc"]')
-    const article = el.querySelector<HTMLElement>('[data-role="article-scroll"]')
-    if (!toc || !article) return
+    if (!toc) return
 
     const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('.article-toc__link'))
     const headings: HTMLElement[] = []
@@ -33,7 +32,6 @@ export function useArticleToc(root: Ref<HTMLElement | undefined>) {
     }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const desktop = window.matchMedia('(min-width: 1024px)')
     const fab = el.querySelector<HTMLButtonElement>('.toc-fab')
     const setSheet = (open: boolean) => {
       toc.classList.toggle('article-toc--sheet-open', open)
@@ -48,19 +46,13 @@ export function useArticleToc(root: Ref<HTMLElement | undefined>) {
         const id = link.getAttribute('href')?.slice(1)
         const target = id ? document.getElementById(id) : null
         if (!target) return
-        if (id) setActive(id)
-        const paddingTop = parseFloat(getComputedStyle(target).scrollMarginTop) || 0
-        if (desktop.matches) {
-          const top =
-            target.getBoundingClientRect().top -
-            article.getBoundingClientRect().top +
-            article.scrollTop -
-            paddingTop
-          article.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? 'auto' : 'smooth' })
-        } else {
-          const top = target.getBoundingClientRect().top + window.scrollY - paddingTop
-          window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? 'auto' : 'smooth' })
+        if (id) {
+          setActive(id)
+          history.replaceState(null, '', `#${id}`)
         }
+        const headerOffset = 96
+        const top = target.getBoundingClientRect().top + window.scrollY - headerOffset
+        window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? 'auto' : 'smooth' })
       }
       link.addEventListener('click', handler)
       cleanups.push(() => link.removeEventListener('click', handler))
@@ -95,27 +87,13 @@ export function useArticleToc(root: Ref<HTMLElement | undefined>) {
             .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
           if (visible[0]) setActive(visible[0].target.id)
         },
-        { root: article, rootMargin: '-16px 0px -70% 0px' },
+        { root: null, rootMargin: '-96px 0px -65% 0px' },
       )
       headings.forEach((heading) => observer!.observe(heading))
     }
 
-    const desktopQuery = window.matchMedia('(min-width: 1024px)')
-    const forceResetPageScroll = () => {
-      if (!desktopQuery.matches) return
-      window.scrollTo({ top: 0, behavior: 'auto' })
-      requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }))
-      window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'auto' }), 60)
-    }
-    desktopQuery.addEventListener('change', forceResetPageScroll)
-    window.addEventListener('resize', forceResetPageScroll)
-    cleanups.push(() => {
-      observer?.disconnect()
-      desktopQuery.removeEventListener('change', forceResetPageScroll)
-      window.removeEventListener('resize', forceResetPageScroll)
-    })
-
     setActive(headings[0].id)
+    cleanups.push(() => observer?.disconnect())
   })
 
   onBeforeUnmount(() => {
