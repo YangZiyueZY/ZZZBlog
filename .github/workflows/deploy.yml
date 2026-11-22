@@ -3,7 +3,14 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [master, main]
+  # Pages CMS 的自定义 Action 通过 workflow_dispatch 传入 payload.inputs，
+  # 必须在工作流中声明 payload 输入，否则会报“提供了意外输入：['payload']”。
   workflow_dispatch:
+    inputs:
+      payload:
+        description: Pages CMS payload as JSON
+        required: false
+        type: string
 
 permissions:
   contents: read
