@@ -475,6 +475,22 @@
   }
 }
 
+/* ===== 文章列表：列数随容器宽度自适应的瀑布流 =====
+   列数不再由断点写死：auto-fill 按容器宽度自动排布，
+   每列最小 --article-column-min，剩余空间再由 1fr 均分。
+   min(100%, …) 兜底极窄视口，保证单列不会被撑出容器。
+   实际列数（容器宽 = 90vw）：375px → 1，768px → 2，1024px → 3，
+   1280px → 4，1440px → 4，1920px → 5。改卡片尺度只需调这个变量。 */
+.article-grid {
+  --article-column-min: 17rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--article-column-min)), 1fr));
+  align-items: start;
+  /* 行距/列距；useMasonry 读取实际 row-gap 作为 span 的高度单位 */
+  gap: 1.25rem;
+}
+
 /* ===== ArticleCard：封面加载占位（zzz-loading） ===== */
 .card-cover {
   position: relative;
@@ -2324,6 +2340,19 @@
   gap: 0.9rem;
 }
 
+/* 展示卡片下方的背景卡片：复用「关于」页 .profile-panel 的
+   点阵 + 深色渐变配方。为保持关于页零变化，这里不改 .profile-panel，
+   只把相同声明收敛到独立类，供更多页的卡片网格使用。 */
+.card-backdrop {
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1.5px) 0 0 / 6px 6px,
+    linear-gradient(#1d1d1d, #151515);
+  border: 2px solid #3a3a3a;
+  border-radius: 1.4rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  padding: clamp(0.9rem, 1.6vw, 1.4rem);
+}
+
 .more-card {
   display: flex;
   align-items: center;
@@ -2411,6 +2440,11 @@
 
   .more-grid {
     grid-template-columns: 1fr;
+  }
+
+  .card-backdrop {
+    padding: 0.9rem;
+    border-radius: 1.1rem;
   }
 
   .more-card-icon {

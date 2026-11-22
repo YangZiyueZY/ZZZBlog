@@ -42,6 +42,53 @@ body.article-view {
   transition: width 0.08s linear;
 }
 
+
+/* 文章页返回按钮：完整继承原版 .back-button 的图标、hover 与按压闪烁动画，
+   仅在尺寸上等比缩小（高 40px，宽高比 2:1 → 80px），并内联在顶栏中 */
+.article-back-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 5rem;
+  height: 2.5rem;
+}
+
+.article-page .article-back,
+.article-page .article-back-pressed {
+  position: absolute;
+  inset: 0;
+  top: auto;
+  left: auto;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 2 / 1;
+  background-size: contain;
+  border: none;
+  padding: 0;
+  z-index: auto;
+}
+
+.article-page .article-back {
+  display: block;
+  z-index: 1;
+}
+
+.article-page .article-back-pressed {
+  z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .article-back-wrap {
+    width: 4.25rem;
+    height: 2.125rem;
+  }
+
+  .article-page .article-back,
+  .article-page .article-back-pressed {
+    height: 100%;
+  }
+}
+
 /* 顶栏 */
 .article-topbar {
   display: flex;
@@ -50,7 +97,6 @@ body.article-view {
   padding: 0.65rem 0 1rem;
 }
 
-.article-back,
 .article-share {
   display: inline-flex;
   align-items: center;
@@ -67,7 +113,6 @@ body.article-view {
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-.article-back:hover,
 .article-share:hover {
   color: #f1d801;
   border-color: #f1d801;

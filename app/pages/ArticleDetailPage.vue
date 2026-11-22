@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import 'katex/dist/katex.min.css'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { articleIndex, getArticleIndex, getCachedArticleHtml, loadArticleHtml, prerenderedArticle } from '../lib/content'
 import { authorInfo, siteConfig, withBase } from '../../src/config/site'
 import { copyText } from '../lib/clipboard'
+import { useBackButton } from '../composables/useBackButton'
 import { useArticleDetail } from '../composables/useArticleDetail'
 import { useArticleToc } from '../composables/useArticleToc'
 import { useArticleProgress } from '../composables/useArticleProgress'
 
 const route = useRoute()
-const router = useRouter()
 const id = Number(route.params.id)
 const article = computed(() => getArticleIndex(id))
 const meta = computed(() => article.value?.meta)
@@ -22,6 +22,8 @@ const category = computed(() => meta.value?.categories[0] ?? '随笔')
 const cover = computed(() => meta.value?.cover[0] ?? '')
 
 const html = ref(getCachedArticleHtml(id) ?? (prerenderedArticle.id === id ? prerenderedArticle.html : ''))
+const backPressed = ref<HTMLElement>()
+const { onBack } = useBackButton(backPressed)
 const detailRoot = ref<HTMLElement>()
 const shared = ref(false)
 useArticleDetail(detailRoot)
@@ -36,7 +38,6 @@ const index = computed(() => articleIndex.findIndex((item) => item.meta.id === i
 const previous = computed(() => (index.value > 0 ? articleIndex[index.value - 1] : null))
 const next = computed(() => (index.value >= 0 && index.value < articleIndex.length - 1 ? articleIndex[index.value + 1] : null))
 
-const goBack = () => router.back()
 const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
 const share = async () => {
@@ -76,7 +77,10 @@ onMounted(async () => {
 
       <div class="article-wrap">
         <div class="article-topbar">
-          <button class="article-back" type="button" @click="goBack"><span aria-hidden="true">←</span> 返回</button>
+          <span class="article-back-wrap">
+            <button class="back-button article-back" type="button" aria-label="返回上一页" @click="onBack"></button>
+            <span ref="backPressed" class="back-button_pressed article-back-pressed" aria-hidden="true"></span>
+          </span>
           <nav class="article-breadcrumb" aria-label="面包屑">
             <RouterLink to="/article/">文章</RouterLink>
             <span aria-hidden="true">/</span>

@@ -65,7 +65,7 @@ const siteLinks: SiteLink[] = [
 
       <section class="more-section" aria-labelledby="more-friends">
         <h2 id="more-friends"><span class="more-section-mark" aria-hidden="true">//</span> 友链</h2>
-        <div class="more-grid">
+        <div class="more-grid card-backdrop">
           <a
             v-for="friend in friends"
             :key="friend.title"
@@ -88,7 +88,7 @@ const siteLinks: SiteLink[] = [
 
       <section class="more-section" aria-labelledby="more-tools">
         <h2 id="more-tools"><span class="more-section-mark" aria-hidden="true">//</span> 工具</h2>
-        <div class="more-grid">
+        <div class="more-grid card-backdrop">
           <a
             v-for="tool in tools"
             :key="tool.title"
@@ -112,7 +112,7 @@ const siteLinks: SiteLink[] = [
 
       <section class="more-section" aria-labelledby="more-links">
         <h2 id="more-links"><span class="more-section-mark" aria-hidden="true">//</span> 站点入口</h2>
-        <div class="more-grid">
+        <div class="more-grid card-backdrop">
           <a
             v-for="link in siteLinks"
             :key="link.title"

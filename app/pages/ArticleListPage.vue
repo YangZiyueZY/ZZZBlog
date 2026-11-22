@@ -15,7 +15,7 @@ useMasonry(gridRef)
     <div class="relative my-8 mx-auto max-w-[90%] min-h-[100vh]">
       <div
         ref="gridRef"
-        class="article-grid grid items-start gap-5 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
+        class="article-grid"
         data-masonry
       >
         <ArticleCard v-for="(article, idx) in articleIndex" :key="article.meta.id" :article="article" :index="idx" />
